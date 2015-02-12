@@ -20,4 +20,10 @@
         android:layout_height="wrap_content"
         android:text="微信支付"
         android:layout_below="@id/txtLogo"/>
+    <Button
+        android:id="@+id/btnWeChatQuery"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="微信订单查询"
+        android:layout_below="@id/btnWeChatPay"/>
 </RelativeLayout>
