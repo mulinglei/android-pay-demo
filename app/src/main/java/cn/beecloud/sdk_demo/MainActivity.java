@@ -17,7 +17,6 @@ import cn.beecloud.BeeCloud;
 public class MainActivity extends Activity {
 
     Button btnWeChatPay;
-    Button btnWeChatQuery;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -29,8 +28,6 @@ public class MainActivity extends Activity {
         BCAnalysis.setUserGender(true);
         BCAnalysis.setUserAge(88);
 
-        final BCPay bcPay = BCPay.sharedInstance(MainActivity.this);
-
         btnWeChatPay = (Button) findViewById(R.id.btnWeChatPay);
         btnWeChatPay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,26 +35,13 @@ public class MainActivity extends Activity {
 
                 try {
 
-                    bcPay.reqWXPaymentAsync("test", "1", BCUtil.generateRandomUUID().replace("-", ""), "BeeCloud-Android", new BCPayCallback() {
+                    BCPay.sharedInstance(MainActivity.this).reqWXPaymentAsync("test", "1", BCUtil.generateRandomUUID().replace("-", ""), "BeeCloud-Android", new BCPayCallback() {
                         @Override
                         public void done(boolean b, String s) {
 
                             System.out.println("reqWXPaymentAsync:" + b + "|" + s);
                         }
                     });
-                } catch (Exception e) {
-                    System.out.println("e.getMessage():" + e.getMessage());
-                }
-            }
-        });
-        btnWeChatQuery = (Button) findViewById(R.id.btnWeChatQuery);
-        btnWeChatQuery.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                try {
-
-                    //bcPay.
                 } catch (Exception e) {
                     System.out.println("e.getMessage():" + e.getMessage());
                 }
