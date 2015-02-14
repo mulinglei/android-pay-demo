@@ -26,15 +26,14 @@
 
         <activity
             android:name="cn.beecloud.PaymentActivity"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
         <activity-alias
             android:name=".wxapi.WXPayEntryActivity"
-            android:targetActivity="cn.beecloud.PaymentActivity"
-            android:exported="true">
+            android:exported="true"
+            android:targetActivity="cn.beecloud.PaymentActivity"></activity-alias>
 
-        </activity-alias>
 
         <activity
             android:name=".SecondActivity"
