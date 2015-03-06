@@ -11,6 +11,7 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -26,4 +27,6 @@ dependencies {
     compile files('libs/gson-2.2.4.jar')
     compile files('libs/libammsdk.jar')
     compile files('libs/alipaysdk.jar')
+    compile files('libs/UPPayAssistEx.jar')
+    compile files('libs/UPPayPluginEx.jar')
 }

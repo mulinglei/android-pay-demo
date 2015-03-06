@@ -1,5 +1,6 @@
 package cn.beecloud.sdk_demo;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -7,10 +8,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
-import cn.beecloud.BCActivity;
 
-
-public class SecondActivity extends BCActivity {
+public class SecondActivity extends Activity {
 
     Button btnPay;
 

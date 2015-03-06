@@ -44,11 +44,26 @@
         android:layout_toRightOf="@+id/btnAliPay"
         android:text="支付宝订单查询" />
 
+    <Button
+        android:id="@+id/btnUPPay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnAliPay"
+        android:text="银联支付" />
+
+    <Button
+        android:id="@+id/btnUPPayOrder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnAliPayOrder"
+        android:layout_toRightOf="@+id/btnUPPay"
+        android:text="银联订单查询" />
+
 
     <ListView
         android:id="@+id/listViewOrder"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/btnAliPayOrder"
+        android:layout_below="@id/btnUPPayOrder"
         android:layout_marginTop="20dp"></ListView>
 </RelativeLayout>
