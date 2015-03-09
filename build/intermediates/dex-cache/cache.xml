@@ -2,6 +2,13 @@
 <items version="2" >
 
     <item
+        jar="D:\BeeCloud\android-pay-demo\app\libs\alipayutdid.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="4345fa0a5a7768f2f9c86aaab7db9e2906765193">
+        <dex dex="D:\BeeCloud\android-pay-demo\app\build\intermediates\pre-dexed\release\alipayutdid-b28c4ecef353ebcbed5ed9c2ef18693bba73d19b.jar" />
+    </item>
+    <item
         jar="D:\BeeCloud\android-pay-demo\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\classes.jar"
         jumboMode="false"
         revision="21.1.2"
@@ -19,7 +26,7 @@
         jar="D:\BeeCloud\android-pay-demo\app\libs\beecloud.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="085fdfa295324f037d31f7e53957ff3d05fef1d7">
+        sha1="eaaf47b3328c88e595e85d547c4fadf458ef2868">
         <dex dex="D:\BeeCloud\android-pay-demo\app\build\intermediates\pre-dexed\debug\beecloud-3940ebd3b58e87dadc251bb79dc0aa8c259f17a6.jar" />
     </item>
     <item
@@ -37,11 +44,11 @@
         <dex dex="D:\BeeCloud\android-pay-demo\app\build\intermediates\pre-dexed\release\libammsdk-e4f455c97aafcd99274c6e824ad7ea3a28555305.jar" />
     </item>
     <item
-        jar="D:\BeeCloud\android-pay-demo\app\libs\UPPayPluginEx.jar"
+        jar="C:\AndroidSDK\extras\android\m2repository\com\android\support\support-annotations\21.0.3\support-annotations-21.0.3.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="dfa0c6e2629ce2df61845afc5d8278adbda1d2e0">
-        <dex dex="D:\BeeCloud\android-pay-demo\app\build\intermediates\pre-dexed\debug\UPPayPluginEx-9af6c45d77126024522720a138bf01dd11aff7b6.jar" />
+        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
+        <dex dex="D:\BeeCloud\android-pay-demo\app\build\intermediates\pre-dexed\release\support-annotations-21.0.3-99422db5d0aeae6cf85c64e462a61ad88da3b250.jar" />
     </item>
     <item
         jar="D:\BeeCloud\android-pay-demo\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\21.0.3\classes.jar"
@@ -51,32 +58,18 @@
         <dex dex="D:\BeeCloud\android-pay-demo\app\build\intermediates\pre-dexed\release\classes-8936659c8c5c72754d2f1d990a2321d34f8b1a24.jar" />
     </item>
     <item
-        jar="D:\BeeCloud\android-pay-demo\app\libs\UPPayAssistEx.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="dc25b911cd16d9ff78ef263ea676be7cfdcbadd7">
-        <dex dex="D:\BeeCloud\android-pay-demo\app\build\intermediates\pre-dexed\debug\UPPayAssistEx-2d019647237fa6019ed2d6047ea2aae4471f7e53.jar" />
-    </item>
-    <item
-        jar="D:\BeeCloud\android-pay-demo\app\libs\alipayutdid.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="4345fa0a5a7768f2f9c86aaab7db9e2906765193">
-        <dex dex="D:\BeeCloud\android-pay-demo\app\build\intermediates\pre-dexed\release\alipayutdid-b28c4ecef353ebcbed5ed9c2ef18693bba73d19b.jar" />
-    </item>
-    <item
-        jar="C:\AndroidSDK\extras\android\m2repository\com\android\support\support-annotations\21.0.3\support-annotations-21.0.3.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
-        <dex dex="D:\BeeCloud\android-pay-demo\app\build\intermediates\pre-dexed\release\support-annotations-21.0.3-99422db5d0aeae6cf85c64e462a61ad88da3b250.jar" />
-    </item>
-    <item
         jar="D:\BeeCloud\android-pay-demo\app\libs\alipaysecsdk.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="7413c074c9edf523050267b93d0875151dc4b644">
         <dex dex="D:\BeeCloud\android-pay-demo\app\build\intermediates\pre-dexed\release\alipaysecsdk-0ae70d16048a016f08523b6a3cdfacf2b370da8f.jar" />
+    </item>
+    <item
+        jar="D:\BeeCloud\android-pay-demo\app\libs\UPPayAssistEx.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="dc25b911cd16d9ff78ef263ea676be7cfdcbadd7">
+        <dex dex="D:\BeeCloud\android-pay-demo\app\build\intermediates\pre-dexed\debug\UPPayAssistEx-2d019647237fa6019ed2d6047ea2aae4471f7e53.jar" />
     </item>
     <item
         jar="D:\BeeCloud\android-pay-demo\app\libs\gson-2.2.4.jar"
