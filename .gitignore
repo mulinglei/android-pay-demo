@@ -16,7 +16,6 @@ gen/
 .gradle/
 build/
 */build/
-/*/build/
 
 # Local configuration file (sdk path, etc)
 local.properties
@@ -29,3 +28,10 @@ proguard/
 
 #other
 *.lock
+.gradle/2.2.1/taskArtifacts/cache.properties
+.gradle/2.2.1/taskArtifacts/fileHashes.bin
+.gradle/2.2.1/taskArtifacts/fileSnapshots.bin
+.gradle/2.2.1/taskArtifacts/taskArtifacts.bin
+*.lock
+.idea/workspace.xml
+.gradle/2.2.1/taskArtifacts/cache.properties
