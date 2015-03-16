@@ -8,6 +8,7 @@ package cn.beecloud.sdk_demo;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -15,19 +16,20 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.orhanobut.dialogplus.DialogPlus;
+import com.orhanobut.dialogplus.Holder;
+import com.orhanobut.dialogplus.ListHolder;
+import com.orhanobut.dialogplus.OnClickListener;
+import com.orhanobut.dialogplus.OnItemClickListener;
 import com.unionpay.UPPayAssistEx;
-
-import java.util.List;
-import java.util.Map;
 
 import cn.beecloud.BCActivity;
 import cn.beecloud.BCAnalysis;
-import cn.beecloud.BCArrayResultCallback;
 import cn.beecloud.BCCallback;
 import cn.beecloud.BCLocation;
 import cn.beecloud.BCPay;
@@ -43,18 +45,8 @@ public class MainActivity extends BCActivity {
     public static final int PLUGIN_NOT_INSTALLED = -1;
     public static final int PLUGIN_NEED_UPGRADE = 2;
 
-    // 标记当前所用的支付方式
-    private static int PayTag = 0;
-
-    Button btnWeChatPay;
-    Button btnWeChatOrder;
-    Button btnAliPay;
-    Button btnAliPayOrder;
-    Button btnUPPay;
-    Button btnUPPayOrder;
-
-    ListView listViewOrder;
-    List<Map<String, Object>> mListMaps = null;
+    Button btnStartPay;
+    Button btnOrderList;
 
     private Handler mHandler;
 
@@ -75,14 +67,7 @@ public class MainActivity extends BCActivity {
              */
             @Override
             public boolean handleMessage(Message msg) {
-                if (msg.what == 1) {
-                    System.out.println("mListMaps" + mListMaps.size());
-                    ModelListAdapter adapter = new ModelListAdapter(MainActivity.this, mListMaps);
-                    listViewOrder.setAdapter(adapter);
-                } else if (msg.what == 2) {
-                    //if (msg.obj.toString().equalsIgnoreCase("ALREADY_REFUNDING"))
-                    Toast.makeText(MainActivity.this, "正在退款中...", Toast.LENGTH_LONG).show();
-                } else if (msg.what == 3) {
+                if (msg.what == 3) {
                     //如果用户手机没有安装银联支付控件,则会提示用户安装
                     AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                     builder.setTitle("提示");
@@ -125,185 +110,112 @@ public class MainActivity extends BCActivity {
             }
         });
 
-        listViewOrder = (ListView) findViewById(R.id.listViewOrder);
-        listViewOrder.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                Map<String, Object> mapModel = mListMaps.get(position);
-
-                String out_trade_no = (String) mapModel.get("out_trade_no");
-
-                if (PayTag == 0) {
-                    BCPay.getInstance(MainActivity.this).refundWxPayStartRefundAsync(out_trade_no, "201101120001", "1", "退款原因！",
-                            new BCPayCallback() {
-                                @Override
-                                public void done(boolean b, String s) {
-                                    Message msg = mHandler.obtainMessage();
-                                    msg.what = 2;
-                                    msg.obj = s;
-                                    mHandler.sendMessage(msg);
-                                }
-                            });
-                } else if (PayTag == 1) {
-                    BCPay.getInstance(MainActivity.this).reqAliRefundAsync(out_trade_no, "201101120001", "0.01", "退款原因！",
-                            new BCPayCallback() {
-                                @Override
-                                public void done(boolean b, String s) {
-                                    Message msg = mHandler.obtainMessage();
-                                    msg.what = 2;
-                                    msg.obj = s;
-                                    mHandler.sendMessage(msg);
-                                }
-                            });
-                } else if (PayTag == 2) {
-                    BCPay.getInstance(MainActivity.this).reqUnionRefundAsync(out_trade_no, "1", "201101120001", "退款原因",
-                            new BCPayCallback() {
-                                @Override
-                                public void done(boolean b, String s) {
-                                    Message msg = mHandler.obtainMessage();
-                                    msg.what = 2;
-                                    msg.obj = s;
-                                    mHandler.sendMessage(msg);
-                                }
-                            });
-                }
-            }
-        });
-
-        btnWeChatPay = (Button) findViewById(R.id.btnWeChatPay);
-        btnWeChatPay.setOnClickListener(new View.OnClickListener() {
+        btnStartPay = (Button) findViewById(R.id.btnStartPay);
+        btnStartPay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    BCPay.getInstance(MainActivity.this).reqWXPaymentAsync("test", "1",
-                            BCUtil.generateRandomUUID().replace("-", ""), "BeeCloud-Android", new BCPayCallback() {
-                                @Override
-                                public void done(boolean b, String s) {
-                                    System.out.println("reqWXPaymentAsync:" + b + "|" + s);
-                                }
-                            });
-                } catch (Exception e) {
-                    System.out.println("e.getMessage():" + e.getMessage());
-                }
+                showDialog(DialogPlus.Gravity.BOTTOM);
             }
         });
-        btnWeChatOrder = (Button) findViewById(R.id.btnWeChatOrder);
-        btnWeChatOrder.setOnClickListener(new View.OnClickListener() {
+        btnOrderList = (Button) findViewById(R.id.btnOrderList);
+        btnOrderList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    PayTag = 0;
-                    BCPay pay = BCPay.getInstance(MainActivity.this);
-                    pay.queryOrderByKeyAsync(BCPay.BCPayOrderKey.OrderKeyTraceID, "BeeCloud-Android",
-                            BCPay.BCPayOrderType.BCPayWxPay, new BCArrayResultCallback() {
-                                @Override
-                                public void done(List<Map<String, Object>> lstMaps) {
-                                    System.out.println("lstMaps" + lstMaps.size());
-                                    mListMaps = lstMaps;
-
-                                    Message msg = mHandler.obtainMessage();
-                                    msg.what = 1;
-                                    mHandler.sendMessage(msg);
-                                }
-                            });
-                } catch (Exception ex) {
-                    System.out.println("btnWeChatPay" + ex);
-                }
+                Intent i = new Intent(MainActivity.this, PayActivity.class);
+                startActivity(i);
             }
         });
+    }
 
-        btnAliPay = (Button) findViewById(R.id.btnAliPay);
-        btnAliPay.setOnClickListener(new View.OnClickListener() {
+    private void showDialog(DialogPlus.Gravity gravity) {
+
+        Holder holder = new ListHolder();
+
+        OnClickListener clickListener = new OnClickListener() {
             @Override
-            public void onClick(View v) {
-                try {
-                    BCPay.getInstance(MainActivity.this).reqAliPaymentAsync("test", BCUtil.generateRandomUUID().replace("-", ""),
-                            "订单标题", "对一笔交易的具体描述信息", "0.01", new BCPayCallback() {
-                                @Override
-                                public void done(boolean b, String s) {
-                                    System.out.println("btnAliPay:" + b + "|" + s);
-                                }
-                            });
-                } catch (Exception e) {
-                    System.out.println("Exception Message:" + e.getMessage());
+            public void onClick(DialogPlus dialog, View view) {
+                switch (view.getId()) {
+                    case R.id.header_container:
+                        Toast.makeText(MainActivity.this, "Header clicked", Toast.LENGTH_LONG).show();
+                        break;
+                    case R.id.footer_confirm_button:
+                        Toast.makeText(MainActivity.this, "Confirm button clicked", Toast.LENGTH_LONG).show();
+                        break;
+                    case R.id.footer_close_button:
+                        Toast.makeText(MainActivity.this, "Close button clicked", Toast.LENGTH_LONG).show();
+                        break;
                 }
+                dialog.dismiss();
             }
-        });
-        btnAliPayOrder = (Button) findViewById(R.id.btnAliPayOrder);
-        btnAliPayOrder.setOnClickListener(new View.OnClickListener() {
+        };
+
+        OnItemClickListener itemClickListener = new OnItemClickListener() {
             @Override
-            public void onClick(View v) {
-                try {
-                    PayTag = 1;
-                    BCPay pay = BCPay.getInstance(MainActivity.this);
-                    pay.queryOrderByKeyAsync(BCPay.BCPayOrderKey.OrderKeyTraceID, "2088002375457915",
-                            BCPay.BCPayOrderType.BCPayAliPay, new BCArrayResultCallback() {
-                                @Override
-                                public void done(List<Map<String, Object>> lstMaps) {
-                                    System.out.println("lstMaps" + lstMaps.size());
-                                    mListMaps = lstMaps;
-
-                                    Message msg = mHandler.obtainMessage();
-                                    msg.what = 1;
-                                    mHandler.sendMessage(msg);
-                                }
-                            });
-                } catch (Exception ex) {
-                    System.out.println("btnAliPay" + ex);
-                }
-            }
-        });
-
-        btnUPPay = (Button) findViewById(R.id.btnUPPay);
-        btnUPPay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    BCPay.getInstance(MainActivity.this).reqUnionPaymentAsync("Android-UPPay", "Android-UPPay-body",
-                            BCUtil.generateRandomUUID().replace("-", ""), "1", new BCPayCallback() {
-                                @Override
-                                public void done(boolean b, String s) {
-                                    System.out.println("btnUPPay:" + b + "|" + s);
-
-                                    int ret = Integer.valueOf(s);
-                                    if (ret == PLUGIN_NEED_UPGRADE || ret == PLUGIN_NOT_INSTALLED) {
-                                        // 需要重新安装控件
-                                        Message msg = mHandler.obtainMessage();
-                                        msg.what = 3;
-                                        mHandler.sendMessage(msg);
+            public void onItemClick(DialogPlus dialog, Object item, View view, int position) {
+                TextView textView = (TextView) view.findViewById(R.id.text_view);
+                String clickItem = textView.getText().toString();
+                dialog.dismiss();
+//                Toast.makeText(MainActivity.this, clickItem + " clicked", Toast.LENGTH_LONG).show();
+                switch (clickItem) {
+                    case "微信支付":
+                        BCPay.getInstance(MainActivity.this).reqWXPaymentAsync("test", "1",
+                                BCUtil.generateRandomUUID().replace("-", ""), "BeeCloud-Android", new BCPayCallback() {
+                                    @Override
+                                    public void done(boolean b, String s) {
+                                        System.out.println("reqWXPaymentAsync:" + b + "|" + s);
                                     }
-                                }
-                            });
-                } catch (Exception e) {
-                    System.out.println("e.getMessage():" + e.getMessage());
+                                });
+                        break;
+                    case "支付宝支付":
+                        BCPay.getInstance(MainActivity.this).reqAliPaymentAsync("test", BCUtil.generateRandomUUID().replace("-", ""),
+                                "订单标题", "对一笔交易的具体描述信息", "0.01", new BCPayCallback() {
+                                    @Override
+                                    public void done(boolean b, String s) {
+                                        System.out.println("btnAliPay:" + b + "|" + s);
+                                    }
+                                });
+                        break;
+                    case "银联支付":
+                        BCPay.getInstance(MainActivity.this).reqUnionPaymentAsync("Android-UPPay", "Android-UPPay-body",
+                                BCUtil.generateRandomUUID().replace("-", ""), "1", new BCPayCallback() {
+                                    @Override
+                                    public void done(boolean b, String s) {
+                                        System.out.println("btnUPPay:" + b + "|" + s);
+
+                                        int ret = Integer.valueOf(s);
+                                        if (ret == PLUGIN_NEED_UPGRADE || ret == PLUGIN_NOT_INSTALLED) {
+                                            // 需要重新安装控件
+                                            Message msg = mHandler.obtainMessage();
+                                            msg.what = 3;
+                                            mHandler.sendMessage(msg);
+                                        }
+                                    }
+                                });
+                        break;
                 }
             }
-        });
-        btnUPPayOrder = (Button) findViewById(R.id.btnUPPayOrder);
-        btnUPPayOrder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    PayTag = 2;
-                    BCPay pay = BCPay.getInstance(MainActivity.this);
-                    pay.queryOrderByKeyAsync(BCPay.BCPayOrderKey.OrderKeyTraceID, "Android-UPPay", BCPay.BCPayOrderType.BCPayUPPay, new BCArrayResultCallback() {
-                        @Override
-                        public void done(List<Map<String, Object>> lstMaps) {
-                            System.out.println("lstMaps" + lstMaps.size());
-                            mListMaps = lstMaps;
+        };
 
-                            Message msg = mHandler.obtainMessage();
-                            msg.what = 1;
-                            mHandler.sendMessage(msg);
-                        }
-                    });
-                } catch (Exception ex) {
-                    System.out.println("btnUPPayOrder" + ex);
-                }
-            }
-        });
+        SimpleAdapter adapter = new SimpleAdapter(MainActivity.this);
+        showCompleteDialog(holder, gravity, adapter, clickListener, itemClickListener);
+    }
 
+    private void showCompleteDialog(Holder holder,
+                                    DialogPlus.Gravity gravity,
+                                    BaseAdapter adapter,
+                                    OnClickListener clickListener,
+                                    OnItemClickListener itemClickListener) {
+        final DialogPlus dialog = new DialogPlus.Builder(this)
+                .setContentHolder(holder)
+                .setHeader(R.layout.header)
+                .setFooter(R.layout.footer)
+                .setCancelable(true)
+                .setGravity(gravity)
+                .setAdapter(adapter)
+                .setOnClickListener(clickListener)
+                .setOnItemClickListener(itemClickListener)
+                .create();
+        dialog.show();
     }
 
     @Override

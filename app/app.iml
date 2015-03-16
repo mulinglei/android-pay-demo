@@ -96,6 +96,7 @@
     <orderEntry type="library" exported="" name="UPPayPluginEx" level="project" />
     <orderEntry type="library" exported="" name="UPPayAssistEx" level="project" />
     <orderEntry type="library" exported="" name="beecloud" level="project" />
+    <orderEntry type="module" module-name="dialogplus" exported="" />
   </component>
 </module>
 
