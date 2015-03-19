@@ -2,7 +2,7 @@
 <resources>
 
     <string name="app_name">SDK-Demo</string>
-    <string name="hello_world">Hello BeeCloud!</string>
+    <string name="hello_world">Hello BeeCloud!\n此为Demo程序，发起支付过程会有点慢，建议在实际开发中添加加载框等方式提高用户的体验！</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_second">SecondActivity</string>
     <string name="dialog_title">Dialog setup:</string>
@@ -16,9 +16,9 @@
     <string name="button_bottom">Bottom</string>
     <string name="button_center">Center</string>
     <string name="button_top">Top</string>
-    <string name="google_plus_title">微信支付</string>
-    <string name="google_maps_title">支付宝支付</string>
-    <string name="google_messenger_title">银联支付</string>
+    <string name="wechat_title">微信支付</string>
+    <string name="alipay_title">支付宝支付</string>
+    <string name="unionpay_title">银联支付</string>
     <string name="question">Do you like Dialog Plus?</string>
     <string name="button_like">I like it</string>
     <string name="button_love">I love it</string>

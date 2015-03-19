@@ -101,12 +101,12 @@ public class MainActivity extends BCActivity {
         BCAnalysis.setUserGender(true);
         BCAnalysis.setUserAge(28);
 
-        BCLocation address_bj = BCLocation.locationWithLatitude(39.92, 116.46);
         //异步获取城市信息
+        BCLocation address_bj = BCLocation.locationWithLatitude(39.92, 116.46);
         address_bj.getCityAsync(new BCCallback() {
             @Override
             public void done(BCResult result) {
-                System.out.println("当前所有城市为：" + result.getMsgInfo());
+                System.out.println("(39.92, 116.46)所在城市为：" + result.getMsgInfo());
             }
         });
 
@@ -114,6 +114,7 @@ public class MainActivity extends BCActivity {
         btnStartPay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //通过TOP, BOTTOM, CENTER控制弹出框显示位置
                 showDialog(DialogPlus.Gravity.BOTTOM);
             }
         });
@@ -155,7 +156,7 @@ public class MainActivity extends BCActivity {
                 TextView textView = (TextView) view.findViewById(R.id.text_view);
                 String clickItem = textView.getText().toString();
                 dialog.dismiss();
-//                Toast.makeText(MainActivity.this, clickItem + " clicked", Toast.LENGTH_LONG).show();
+
                 switch (clickItem) {
                     case "微信支付":
                         BCPay.getInstance(MainActivity.this).reqWXPaymentAsync("test", "1",

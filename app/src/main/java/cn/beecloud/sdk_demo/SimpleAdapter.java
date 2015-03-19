@@ -56,16 +56,16 @@ public class SimpleAdapter extends BaseAdapter {
         Context context = parent.getContext();
         switch (position) {
             case 0:
-                viewHolder.textView.setText(context.getString(R.string.google_plus_title));
-                viewHolder.imageView.setImageResource(R.drawable.ic_google_plus_icon);
+                viewHolder.textView.setText(context.getString(R.string.wechat_title));
+                viewHolder.imageView.setImageResource(R.drawable.wechat);
                 break;
             case 1:
-                viewHolder.textView.setText(context.getString(R.string.google_maps_title));
-                viewHolder.imageView.setImageResource(R.drawable.ic_google_maps_icon);
+                viewHolder.textView.setText(context.getString(R.string.alipay_title));
+                viewHolder.imageView.setImageResource(R.drawable.alipay);
                 break;
             default:
-                viewHolder.textView.setText(context.getString(R.string.google_messenger_title));
-                viewHolder.imageView.setImageResource(R.drawable.ic_google_messenger_icon);
+                viewHolder.textView.setText(context.getString(R.string.unionpay_title));
+                viewHolder.imageView.setImageResource(R.drawable.unionpay);
                 break;
         }
 
