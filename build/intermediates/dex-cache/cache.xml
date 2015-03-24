@@ -19,7 +19,7 @@
         jar="D:\BeeCloud\android-pay-demo\app\libs\beecloud.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="eaaf47b3328c88e595e85d547c4fadf458ef2868">
+        sha1="4213fcb9688ff081533b7c6db58862c4376620b1">
         <dex dex="D:\BeeCloud\android-pay-demo\app\build\intermediates\pre-dexed\debug\beecloud-3940ebd3b58e87dadc251bb79dc0aa8c259f17a6.jar" />
     </item>
     <item

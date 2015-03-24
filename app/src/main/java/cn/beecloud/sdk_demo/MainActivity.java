@@ -28,6 +28,9 @@ import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.OnItemClickListener;
 import com.unionpay.UPPayAssistEx;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import cn.beecloud.BCActivity;
 import cn.beecloud.BCAnalysis;
 import cn.beecloud.BCCallback;
@@ -54,6 +57,11 @@ public class MainActivity extends BCActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        BeeCloud.setAppIdAndSecret(this, "c5d1cba1-5e3f-4ba0-941d-9b0a371fe719", "39a7a518-9ac8-4a9e-87bc-7885f33cf18c");
+        BCAnalysis.setUserId("BeeCloud Android User！");
+        BCAnalysis.setUserGender(true);
+        BCAnalysis.setUserAge(28);
 
         // Defines a Handler object that's attached to the UI thread.
         // 通过Handler.Callback()可消除内存泄漏警告 By ZhuChenglin
@@ -95,11 +103,6 @@ public class MainActivity extends BCActivity {
                 return true;
             }
         });
-
-        BeeCloud.setAppIdAndSecret("c5d1cba1-5e3f-4ba0-941d-9b0a371fe719", "39a7a518-9ac8-4a9e-87bc-7885f33cf18c", this);
-        BCAnalysis.setUserId("BeeCloud Android User！");
-        BCAnalysis.setUserGender(true);
-        BCAnalysis.setUserAge(28);
 
         //异步获取城市信息
         BCLocation address_bj = BCLocation.locationWithLatitude(39.92, 116.46);
@@ -159,8 +162,15 @@ public class MainActivity extends BCActivity {
 
                 switch (clickItem) {
                     case "微信支付":
+                        Map<String, String> mapOptional = new HashMap<>();
+                        String optionalKey = "android_optional_key";
+                        String optionalValue = "android_optional_value";
+                        if (!BCUtil.isValidIdentifier(optionalKey) || !BCUtil.isValidIdentifier(optionalValue)) {
+                            return;
+                        }
+                        mapOptional.put(optionalKey, optionalValue);
                         BCPay.getInstance(MainActivity.this).reqWXPaymentAsync("test", "1",
-                                BCUtil.generateRandomUUID().replace("-", ""), "BeeCloud-Android", new BCPayCallback() {
+                                BCUtil.generateRandomUUID().replace("-", ""), "BeeCloud-Android", mapOptional, new BCPayCallback() {
                                     @Override
                                     public void done(boolean b, String s) {
                                         System.out.println("reqWXPaymentAsync:" + b + "|" + s);
@@ -168,8 +178,15 @@ public class MainActivity extends BCActivity {
                                 });
                         break;
                     case "支付宝支付":
+                        mapOptional = new HashMap<>();
+                        optionalKey = "android_optional_key";
+                        optionalValue = "android_optional_value";
+                        if (!BCUtil.isValidIdentifier(optionalKey) || !BCUtil.isValidIdentifier(optionalValue)) {
+                            return;
+                        }
+                        mapOptional.put(optionalKey, optionalValue);
                         BCPay.getInstance(MainActivity.this).reqAliPaymentAsync("test", BCUtil.generateRandomUUID().replace("-", ""),
-                                "订单标题", "对一笔交易的具体描述信息", "0.01", new BCPayCallback() {
+                                "订单标题", "对一笔交易的具体描述信息", "0.01", mapOptional, new BCPayCallback() {
                                     @Override
                                     public void done(boolean b, String s) {
                                         System.out.println("btnAliPay:" + b + "|" + s);
@@ -177,8 +194,15 @@ public class MainActivity extends BCActivity {
                                 });
                         break;
                     case "银联支付":
+                        mapOptional = new HashMap<>();
+                        optionalKey = "android_optional_key";
+                        optionalValue = "android_optional_value";
+                        if (!BCUtil.isValidIdentifier(optionalKey) || !BCUtil.isValidIdentifier(optionalValue)) {
+                            return;
+                        }
+                        mapOptional.put(optionalKey, optionalValue);
                         BCPay.getInstance(MainActivity.this).reqUnionPaymentAsync("Android-UPPay", "Android-UPPay-body",
-                                BCUtil.generateRandomUUID().replace("-", ""), "1", new BCPayCallback() {
+                                BCUtil.generateRandomUUID().replace("-", ""), "1", mapOptional, new BCPayCallback() {
                                     @Override
                                     public void done(boolean b, String s) {
                                         System.out.println("btnUPPay:" + b + "|" + s);
