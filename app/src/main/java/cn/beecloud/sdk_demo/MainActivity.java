@@ -221,7 +221,7 @@ public class MainActivity extends BCActivity {
             }
         };
 
-        SimpleAdapter adapter = new SimpleAdapter(MainActivity.this);
+        MySimpleAdapter adapter = new MySimpleAdapter(MainActivity.this);
         showCompleteDialog(holder, gravity, adapter, clickListener, itemClickListener);
     }
 

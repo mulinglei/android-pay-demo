@@ -30,4 +30,6 @@
     <string name="title_activity_pay">PayActivity</string>
     <string name="order_list">订单查询</string>
     <string name="start_pay">发起支付</string>
+    <string name="title_activity_shopping_cart">ShoppingCartActivity</string>
+    <string name="title_activity_balance">BalanceActivity</string>
 </resources>
