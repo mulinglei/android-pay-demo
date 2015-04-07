@@ -12,7 +12,15 @@
     <ListView
         android:id="@+id/lstViewShoppingCart"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" android:layout_marginBottom="100dp"/>
+        android:layout_height="match_parent" android:layout_marginBottom="200dp"/>
+
+    <ImageView
+        android:id="@+id/imageQRCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="80dp"/>
 
     <Button
         android:id="@+id/btnShopping"

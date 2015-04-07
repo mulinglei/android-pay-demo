@@ -2,6 +2,7 @@ package cn.beecloud.sdk_demo;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -11,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +32,9 @@ import java.util.Map;
 import cn.beecloud.BCAnalysis;
 import cn.beecloud.BCPay;
 import cn.beecloud.BCPayCallback;
+import cn.beecloud.BCQRCodeCallback;
+import cn.beecloud.BCQRCodePay;
+import cn.beecloud.BCQRCodeResult;
 import cn.beecloud.BCUtil;
 import cn.beecloud.BeeCloud;
 
@@ -54,6 +59,8 @@ public class ShoppingCartActivity extends ActionBarActivity {
     public static final int PLUGIN_NEED_UPGRADE = 2;
 
     Button btnShopping;
+    ImageView imageQRCode;
+    Bitmap bitmapQRCode;
     private Handler mHandler;
 
     @Override
@@ -102,6 +109,8 @@ public class ShoppingCartActivity extends ActionBarActivity {
                                 }
                             });
                     builder.create().show();
+                } else if (msg.what == 4) {
+                    imageQRCode.setImageBitmap(bitmapQRCode);
                 }
                 return true;
             }
@@ -132,8 +141,20 @@ public class ShoppingCartActivity extends ActionBarActivity {
         ShoppingAdapter adapter = new ShoppingAdapter(this, listItems);
         ListView listView = (ListView) findViewById(R.id.lstViewShoppingCart);
         listView.setAdapter(adapter);
-    }
 
+        imageQRCode = (ImageView) findViewById(R.id.imageQRCode);
+        BCQRCodePay.getInstance().reqWXQRCodePayAsync("NATIVE", "web wxpay", "1",
+                BCUtil.generateRandomUUID().toString().replace("-", ""), 300, 300,
+                new BCQRCodeCallback() {
+                    @Override
+                    public void done(BCQRCodeResult result) {
+                        bitmapQRCode = result.getBitmap();
+                        Message msg = mHandler.obtainMessage();
+                        msg.what = 4;
+                        mHandler.sendMessage(msg);
+                    }
+                });
+    }
 
     private void showDialog(DialogPlus.Gravity gravity) {
 
