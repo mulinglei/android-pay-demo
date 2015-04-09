@@ -194,7 +194,18 @@ public class ShoppingCartActivity extends ActionBarActivity {
                             return;
                         }
                         mapOptional.put(optionalKey, optionalValue);
-                        BCPay.getInstance(ShoppingCartActivity.this).reqWXPaymentAsync("test", "1",
+
+                         /*
+                         //老版本微信
+                         BCPay.getInstance(ShoppingCartActivity.this).reqWXPaymentV2Async("test", "1",
+                                BCUtil.generateRandomUUID().replace("-", ""), "BeeCloud-Android", mapOptional, new BCPayCallback() {
+                                    @Override
+                                    public void done(boolean b, String s) {
+                                        System.out.println("reqWXPaymentAsync:" + b + "|" + s);
+                                    }
+                                });*/
+                        //新版本微信
+                        BCPay.getInstance(ShoppingCartActivity.this).reqWXPaymentV3Async("test", "1",
                                 BCUtil.generateRandomUUID().replace("-", ""), "BeeCloud-Android", mapOptional, new BCPayCallback() {
                                     @Override
                                     public void done(boolean b, String s) {
@@ -209,7 +220,9 @@ public class ShoppingCartActivity extends ActionBarActivity {
                         if (!BCUtil.isValidIdentifier(optionalKey) || !BCUtil.isValidIdentifier(optionalValue)) {
                             return;
                         }
-                        mapOptional.put(optionalKey, optionalValue);
+                        mapOptional.put("paymentid", "");
+                        mapOptional.put("consumptioncode", "consumptionCode");
+                        mapOptional.put("money", "2");
                         BCPay.getInstance(ShoppingCartActivity.this).reqAliPaymentAsync("test", BCUtil.generateRandomUUID().replace("-", ""),
                                 "订单标题", "对一笔交易的具体描述信息", "0.01", mapOptional, new BCPayCallback() {
                                     @Override
