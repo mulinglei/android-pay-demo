@@ -33,15 +33,16 @@ import java.util.Map;
 
 import cn.beecloud.BCActivity;
 import cn.beecloud.BCAnalysis;
-import cn.beecloud.BCCallback;
 import cn.beecloud.BCLocation;
 import cn.beecloud.BCPay;
-import cn.beecloud.BCPayCallback;
-import cn.beecloud.BCResult;
 import cn.beecloud.BCUtil;
 import cn.beecloud.BeeCloud;
+import cn.beecloud.async.BCCallback;
+import cn.beecloud.async.BCResult;
 
 public class MainActivity extends BCActivity {
+
+    private static final String TAG = "MainActivity";
 
     // 银联支付控件的状态
     public static final int PLUGIN_VALID = 0;
@@ -109,7 +110,7 @@ public class MainActivity extends BCActivity {
         address_bj.getCityAsync(new BCCallback() {
             @Override
             public void done(BCResult result) {
-                System.out.println("(39.92, 116.46)所在城市为：" + result.getMsgInfo());
+                Log.i(TAG, "(39.92, 116.46)所在城市为：" + result.getMsgInfo());
             }
         });
 
@@ -169,11 +170,21 @@ public class MainActivity extends BCActivity {
                             return;
                         }
                         mapOptional.put(optionalKey, optionalValue);
-                        BCPay.getInstance(MainActivity.this).reqWXPaymentAsync("test", "1",
+                        /*
+                         //老版本微信
+                         BCPay.getInstance(MainActivity.this).reqWXPaymentV2Async("test", "1",
                                 BCUtil.generateRandomUUID().replace("-", ""), "BeeCloud-Android", mapOptional, new BCPayCallback() {
                                     @Override
                                     public void done(boolean b, String s) {
-                                        System.out.println("reqWXPaymentAsync:" + b + "|" + s);
+                                        Log.i(TAG, "reqWXPaymentAsync:" + b + "|" + s);
+                                    }
+                                });*/
+                        //新版本微信
+                        BCPay.getInstance(MainActivity.this).reqWXPaymentV3Async("test", "1",
+                                BCUtil.generateRandomUUID().replace("-", ""), "BeeCloud-Android", mapOptional, new BCCallback() {
+                                    @Override
+                                    public void done(BCResult bcResult) {
+                                        Log.i(TAG, "reqWXPaymentAsync:" + bcResult.isSuccess() + "|" + bcResult.getMsgInfo());
                                     }
                                 });
                         break;
@@ -186,10 +197,10 @@ public class MainActivity extends BCActivity {
                         }
                         mapOptional.put(optionalKey, optionalValue);
                         BCPay.getInstance(MainActivity.this).reqAliPaymentAsync("test", BCUtil.generateRandomUUID().replace("-", ""),
-                                "订单标题", "对一笔交易的具体描述信息", "0.01", mapOptional, new BCPayCallback() {
+                                "订单标题", "对一笔交易的具体描述信息", "0.01", mapOptional, new BCCallback() {
                                     @Override
-                                    public void done(boolean b, String s) {
-                                        System.out.println("btnAliPay:" + b + "|" + s);
+                                    public void done(BCResult bcResult) {
+                                        Log.i(TAG, "btnAliPay:" + bcResult.isSuccess() + "|" + bcResult.getMsgInfo());
                                     }
                                 });
                         break;
@@ -202,12 +213,12 @@ public class MainActivity extends BCActivity {
                         }
                         mapOptional.put(optionalKey, optionalValue);
                         BCPay.getInstance(MainActivity.this).reqUnionPaymentAsync("Android-UPPay", "Android-UPPay-body",
-                                BCUtil.generateRandomUUID().replace("-", ""), "1", mapOptional, new BCPayCallback() {
+                                BCUtil.generateRandomUUID().replace("-", ""), "1", mapOptional, new BCCallback() {
                                     @Override
-                                    public void done(boolean b, String s) {
-                                        System.out.println("btnUPPay:" + b + "|" + s);
+                                    public void done(BCResult bcResult) {
+                                        Log.i(TAG, "btnUPPay:" + bcResult.isSuccess() + "|" + bcResult.getMsgInfo());
 
-                                        int ret = Integer.valueOf(s);
+                                        int ret = Integer.valueOf(bcResult.getMsgInfo());
                                         if (ret == PLUGIN_NEED_UPGRADE || ret == PLUGIN_NOT_INSTALLED) {
                                             // 需要重新安装控件
                                             Message msg = mHandler.obtainMessage();

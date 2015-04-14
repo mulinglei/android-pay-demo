@@ -3,6 +3,7 @@ package cn.beecloud.sdk_demo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,11 +16,14 @@ import java.util.List;
 import java.util.Map;
 
 import cn.beecloud.BCActivity;
-import cn.beecloud.BCArrayResultCallback;
 import cn.beecloud.BCPay;
-import cn.beecloud.BCPayCallback;
+import cn.beecloud.async.BCArrayResultCallback;
+import cn.beecloud.async.BCCallback;
+import cn.beecloud.async.BCResult;
 
 public class PayActivity extends BCActivity {
+
+    private static final String TAG = "PayActivity";
 
     // 标记当前所用的支付方式
     private static int PayTag = 0;
@@ -51,7 +55,7 @@ public class PayActivity extends BCActivity {
             @Override
             public boolean handleMessage(Message msg) {
                 if (msg.what == 1) {
-                    System.out.println("mListMaps" + mListMaps.size());
+                    Log.i(TAG, "mListMaps" + mListMaps.size());
                     ModelListAdapter adapter = new ModelListAdapter(PayActivity.this, mListMaps);
                     listViewOrder.setAdapter(adapter);
                 } else if (msg.what == 2) {
@@ -73,34 +77,34 @@ public class PayActivity extends BCActivity {
 
                 if (PayTag == 0) {
                     BCPay.getInstance(PayActivity.this).refundWxPayStartRefundAsync(out_trade_no, "201101120001", "1", "退款原因！",
-                            new BCPayCallback() {
+                            new BCCallback() {
                                 @Override
-                                public void done(boolean b, String s) {
+                                public void done(BCResult bcResult) {
                                     Message msg = mHandler.obtainMessage();
                                     msg.what = 2;
-                                    msg.obj = s;
+                                    msg.obj = bcResult.getMsgInfo();
                                     mHandler.sendMessage(msg);
                                 }
                             });
                 } else if (PayTag == 1) {
                     BCPay.getInstance(PayActivity.this).reqAliRefundAsync(out_trade_no, "201101120001", "0.01", "退款原因！",
-                            new BCPayCallback() {
+                            new BCCallback() {
                                 @Override
-                                public void done(boolean b, String s) {
+                                public void done(BCResult bcResult) {
                                     Message msg = mHandler.obtainMessage();
                                     msg.what = 2;
-                                    msg.obj = s;
+                                    msg.obj = bcResult.getMsgInfo();
                                     mHandler.sendMessage(msg);
                                 }
                             });
                 } else if (PayTag == 2) {
                     BCPay.getInstance(PayActivity.this).reqUnionRefundAsync(out_trade_no, "1", "201101120001", "退款原因",
-                            new BCPayCallback() {
+                            new BCCallback() {
                                 @Override
-                                public void done(boolean b, String s) {
+                                public void done(BCResult bcResult) {
                                     Message msg = mHandler.obtainMessage();
                                     msg.what = 2;
-                                    msg.obj = s;
+                                    msg.obj = bcResult.getMsgInfo();
                                     mHandler.sendMessage(msg);
                                 }
                             });
@@ -118,7 +122,7 @@ public class PayActivity extends BCActivity {
                             BCPay.BCPayOrderType.BCPayWxPay, new BCArrayResultCallback() {
                                 @Override
                                 public void done(List<Map<String, Object>> lstMaps) {
-                                    System.out.println("lstMaps" + lstMaps.size());
+                                    Log.i(TAG, "lstMaps" + lstMaps.size());
                                     mListMaps = lstMaps;
 
                                     Message msg = mHandler.obtainMessage();
@@ -127,7 +131,7 @@ public class PayActivity extends BCActivity {
                                 }
                             });
                 } catch (Exception ex) {
-                    System.out.println("btnWeChatPay" + ex);
+                    Log.i(TAG, "btnWeChatPay" + ex);
                 }
             }
         });
@@ -142,7 +146,7 @@ public class PayActivity extends BCActivity {
                             BCPay.BCPayOrderType.BCPayAliPay, new BCArrayResultCallback() {
                                 @Override
                                 public void done(List<Map<String, Object>> lstMaps) {
-                                    System.out.println("lstMaps" + lstMaps.size());
+                                    Log.i(TAG, "lstMaps" + lstMaps.size());
                                     mListMaps = lstMaps;
 
                                     Message msg = mHandler.obtainMessage();
@@ -151,7 +155,7 @@ public class PayActivity extends BCActivity {
                                 }
                             });
                 } catch (Exception ex) {
-                    System.out.println("btnAliPay" + ex);
+                    Log.i(TAG, "btnAliPay" + ex);
                 }
             }
         });
@@ -165,7 +169,8 @@ public class PayActivity extends BCActivity {
                     pay.queryOrderByKeyAsync(BCPay.BCPayOrderKey.OrderKeyTraceID, "Android-UPPay", BCPay.BCPayOrderType.BCPayUPPay, new BCArrayResultCallback() {
                         @Override
                         public void done(List<Map<String, Object>> lstMaps) {
-                            System.out.println("lstMaps" + lstMaps.size());
+                            Log.i(TAG, "lstMaps" + lstMaps.size());
+
                             mListMaps = lstMaps;
 
                             Message msg = mHandler.obtainMessage();
@@ -174,7 +179,7 @@ public class PayActivity extends BCActivity {
                         }
                     });
                 } catch (Exception ex) {
-                    System.out.println("btnUPPayOrder" + ex);
+                    Log.i(TAG, "btnUPPayOrder" + ex);
                 }
             }
         });

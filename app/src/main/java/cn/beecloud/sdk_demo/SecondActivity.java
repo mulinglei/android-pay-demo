@@ -11,6 +11,7 @@ import android.widget.Button;
 
 public class SecondActivity extends Activity {
 
+    private static final String TAG = "SecondActivity";
     Button btnPay;
 
     @Override
@@ -33,58 +34,58 @@ public class SecondActivity extends Activity {
         BCConfig.getConfigWithNameAsync("bool", new BCConfigCallBack() {
             @Override
             public void done(BCConfigResult result) {
-                System.out.println("getConfig");
-                System.out.println(result.getBool());
+                Log.i(TAG, "getConfig");
+                Log.i(TAG, result.getBool());
             }
         });
 
         BCConfig.getConfigWithNameAsync("int", new BCConfigCallBack() {
             @Override
             public void done(BCConfigResult result) {
-                System.out.println("getConfig");
-                System.out.println(result.getInt());
+                Log.i(TAG, "getConfig");
+                Log.i(TAG, result.getInt());
             }
         });
         BCConfig.getConfigWithNameAsync("long", new BCConfigCallBack() {
             @Override
             public void done(BCConfigResult result) {
-                System.out.println("getConfig");
-                System.out.println(result.getLong());
+                Log.i(TAG, "getConfig");
+                Log.i(TAG, result.getLong());
             }
         });
         BCConfig.getConfigWithNameAsync("float", new BCConfigCallBack() {
             @Override
             public void done(BCConfigResult result) {
-                System.out.println("getConfig");
-                System.out.println(result.getFloat());
+                Log.i(TAG, "getConfig");
+                Log.i(TAG, result.getFloat());
             }
         });
         BCConfig.getConfigWithNameAsync("uuid", new BCConfigCallBack() {
             @Override
             public void done(BCConfigResult result) {
-                System.out.println("getConfig");
-                System.out.println(result.getUUID());
+                Log.i(TAG, "getConfig");
+                Log.i(TAG, result.getUUID());
             }
         });
         BCConfig.getConfigWithNameAsync("date", new BCConfigCallBack() {
             @Override
             public void done(BCConfigResult result) {
-                System.out.println("getConfig");
-                System.out.println(result.getDate());
+                Log.i(TAG, "getConfig");
+                Log.i(TAG, result.getDate());
             }
         });
         BCConfig.getConfigWithNameAsync("string", new BCConfigCallBack() {
             @Override
             public void done(BCConfigResult result) {
-                System.out.println("getConfig");
-                System.out.println(result.getString());
+                Log.i(TAG, "getConfig");
+                Log.i(TAG, result.getString());
             }
         });
         BCConfig.getConfigWithNameAsync("location", new BCConfigCallBack() {
             @Override
             public void done(BCConfigResult result) {
-                System.out.println("getConfig");
-                System.out.println(result.getLocation());
+                Log.i(TAG, "getConfig");
+                Log.i(TAG, result.getLocation());
             }
         });
 
@@ -101,11 +102,10 @@ public class SecondActivity extends Activity {
 
                 q.findObjectsAsync(new BCQueryCallBack() {
                     public void done(BCQueryResult result) {
-                        List<BCObject> objects = result.getObjects();
-                        System.out.println(objects);
+                        List<BCObject> objects = result.getObjects();x
+                        Log.i(TAG, objects);
                         for (BCObject user : objects) {
-                            System.out.println("----------------");
-                            System.out.println(user.objectForKey("objectId"));
+                            Log.i(TAG, user.objectForKey("objectId"));
                         }
                     }
                 });
@@ -121,44 +121,43 @@ public class SecondActivity extends Activity {
         q.findObjectsAsync(new BCQueryCallBack() {
             public void done(BCQueryResult result) {
                 List<BCObject> users = result.getObjects();
-                System.out.println(users);
+                Log.i(TAG, users);
                 for (BCObject user : users) {
-                    System.out.println("----------------");
-                    System.out.println(user.objectForKey("objectId"));
+                    Log.i(TAG, user.objectForKey("objectId"));
                 }
             }
         });
 
         //getCurrentLocation
-        System.out.println(BCLocation.getCurrentLocation());
+        Log.i(TAG, BCLocation.getCurrentLocation());
 
         //distance
         BCLocation address_bj = BCLocation.locationWithLatitude(39.92, 116.46);
-        System.out.println(address_bj.distanceInMetersTo(BCLocation.locationWithLatitude(39.92, 116.56)));
+        Log.i(TAG, address_bj.distanceInMetersTo(BCLocation.locationWithLatitude(39.92, 116.56)));
 
         //getAddressAsync
         address_bj.getAddressAsync(new BCAddressCallBack() {
             public void done(BCAddressResult result) {
-                System.out.println(result.getFormattedAddress());
-                System.out.println(result.getStreet());
-                System.out.println(result.getStreetNumber());
-                System.out.println(result.getDistrict());
-                System.out.println(result.getCity());
-                System.out.println(result.getProvince());
-                System.out.println(result.getCountry());
-                System.out.println(result.getCountryCode());
-                System.out.println(result.getContinent());
-                System.out.println(result.getTimeZone());
+                Log.i(TAG, result.getFormattedAddress());
+                Log.i(TAG, result.getStreet());
+                Log.i(TAG, result.getStreetNumber());
+                Log.i(TAG, result.getDistrict());
+                Log.i(TAG, result.getCity());
+                Log.i(TAG, result.getProvince());
+                Log.i(TAG, result.getCountry());
+                Log.i(TAG, result.getCountryCode());
+                Log.i(TAG, result.getContinent());
+                Log.i(TAG, result.getTimeZone());
             }
         });
 
         // saveAsync
         BCObject saveObj = BCObject.newObject("infolist3");
         saveObj.setDouble("question2", 2.0);
-        System.out.println(saveObj.allKeys());
-        System.out.println(saveObj.userKeys());
-        System.out.println(saveObj.objectForKey("question2"));
-        System.out.println(saveObj.getDataTypeForKey("question2"));
+        Log.i(TAG, saveObj.allKeys());
+        Log.i(TAG, saveObj.userKeys());
+        Log.i(TAG, saveObj.objectForKey("question2"));
+        Log.i(TAG, saveObj.getDataTypeForKey("question2"));
         saveObj.saveAsync();
 
         saveObj = BCObject.newObject("infolist3");
@@ -167,7 +166,7 @@ public class SecondActivity extends Activity {
         saveObj.removeObjectForKey("question3");
         saveObj.saveAsync(new BCCallBack() {
             public void done(BCResult result) {
-                System.out.println(result.isSuccess());
+                Log.i(TAG, result.isSuccess());
             }
         });
 
@@ -181,7 +180,7 @@ public class SecondActivity extends Activity {
                 "3411042c-0b00-4f4b-ba0d-a0a165fe8339", false);
         refresh.refreshAsync(new BCCallBack() {
             public void done(BCResult result) {
-                System.out.println(result.isSuccess());
+                Log.i(TAG, result.isSuccess());
             }
         });
 
@@ -196,7 +195,7 @@ public class SecondActivity extends Activity {
         modifyObject.setDouble("question2", 5.0);
         modifyObject.saveAsync(new BCCallBack() {
             public void done(BCResult result) {
-                System.out.println(result.isSuccess());
+                Log.i(TAG, result.isSuccess());
             }
         });
 
@@ -209,7 +208,7 @@ public class SecondActivity extends Activity {
                 "987b0994-d5bf-44a0-9a3a-f4d1825c2aaf", false);
         deleteObject.deleteAsync(new BCCallBack() {
             public void done(BCResult result) {
-                System.out.println(result.isSuccess());
+                Log.i(TAG, result.isSuccess());
             }
         });
 
@@ -222,17 +221,19 @@ public class SecondActivity extends Activity {
         // keys.add("question3");
         // // q1.selectKeys(keys);
         // BCQueryResult q1res = q1.findObjects();
-        // System.out.println(q1res.getObjects());
+        // Log.i(TAG, q1res.getObjects());
         // for (BCObject obj:q1res.getObjects()) {
-        // System.out.println(obj.objectForKey("objectid"));
+        // Log.i(TAG, obj.objectForKey("objectid"));
+
         // }
 
         // findObjectsAsync
         q1.findObjectsAsync(new BCQueryCallBack() {
             public void done(BCQueryResult result) {
-                System.out.println(result.getObjects());
+                Log.i(TAG, result.getObjects());
+
                 for (BCObject obj : result.getObjects()) {
-                    System.out.println(obj.objectForKey("question3"));
+                    Log.i(TAG, obj.objectForKey("question3"));
                 }
             }
         });
@@ -241,8 +242,9 @@ public class SecondActivity extends Activity {
         q1.getObjectAsync("28b74a4c-a3b3-4019-890e-dccd98f47610",
                 new BCQueryCallBack() {
                     public void done(BCQueryResult result) {
-                        System.out.println(result.getSingleObject()
+                        Log.i(TAG, result.getSingleObject()
                                 .objectForKey("question2"));
+
                     }
                 });
 
@@ -253,15 +255,15 @@ public class SecondActivity extends Activity {
         // countObjectsAsync
         q2.countObjectsAsync(new BCQueryCallBack() {
             public void done(BCQueryResult results) {
-                System.out.println(results.getCountObject());
+                Log.i(TAG, results.getCountObject());
             }
         });
 
         // deleteObjectsAsync
         q2.deleteObjectsAsync(new BCCallBack() {
             public void done(BCResult ret) {
-                System.out.println(ret.getErrorInfo());
-                System.out.println(ret.isSuccess());
+                Log.i(TAG, ret.getErrorInfo());
+                Log.i(TAG, ret.isSuccess());
             }
         });
 
@@ -272,7 +274,7 @@ public class SecondActivity extends Activity {
         query.whereKeyEqualTo("aaee", 453);
         query.modifyObjectsWithExampleAsync(obj, new BCCallBack() {
             public void done(BCResult result) {
-                System.out.println(result.isSuccess());
+                Log.i(TAG, result.isSuccess());
             }
         });
          */
