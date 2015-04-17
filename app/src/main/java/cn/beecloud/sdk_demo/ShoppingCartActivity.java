@@ -29,6 +29,7 @@ import com.orhanobut.dialogplus.Holder;
 import com.orhanobut.dialogplus.ListHolder;
 import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.OnItemClickListener;
+import com.tencent.mm.sdk.modelbase.BaseResp;
 import com.unionpay.UPPayAssistEx;
 
 import java.util.ArrayList;
@@ -67,6 +68,7 @@ public class ShoppingCartActivity extends ActionBarActivity {
     public static final int PLUGIN_NEED_UPGRADE = 2;
 
     Button btnShopping;
+    Button btnQueryAndRefund;
     ImageView imageQRCode;
     Bitmap bitmapQRCode;
     private Handler mHandler;
@@ -77,6 +79,7 @@ public class ShoppingCartActivity extends ActionBarActivity {
         setContentView(R.layout.activity_shopping_cart);
         //BeeCloud
         BeeCloud.setAppIdAndSecret(this, "c5d1cba1-5e3f-4ba0-941d-9b0a371fe719", "39a7a518-9ac8-4a9e-87bc-7885f33cf18c");
+        //BeeCloud.setNetworkTimeout(5000);
 
         BCAnalysis.setUserId("BeeCloud Android User！");
         BCAnalysis.setUserGender(true);
@@ -125,11 +128,20 @@ public class ShoppingCartActivity extends ActionBarActivity {
             }
         });
 
-        btnShopping = (Button) findViewById(R.id.btnShopping);
+        btnShopping = (Button) findViewById(R.id.btnPay);
         btnShopping.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDialog(DialogPlus.Gravity.BOTTOM);
+            }
+        });
+
+        btnQueryAndRefund = (Button) findViewById(R.id.btnQueryAndRefund);
+        btnQueryAndRefund.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ShoppingCartActivity.this, MainActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -182,17 +194,17 @@ public class ShoppingCartActivity extends ActionBarActivity {
             return;
         }
 
-        String msg = "";
+        String msg = "银联支付:";
         /*
          * 支付控件返回字符串:success、fail、cancel 分别代表支付成功，支付失败，支付取消
          */
         String str = data.getExtras().getString("pay_result");
         if (str.equalsIgnoreCase("success")) {
-            msg = "支付成功！";
+            msg += "支付成功！";
         } else if (str.equalsIgnoreCase("fail")) {
-            msg = "支付失败！";
+            msg += "支付失败！";
         } else if (str.equalsIgnoreCase("cancel")) {
-            msg = "用户取消了支付";
+            msg += "用户取消了支付";
         }
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
@@ -261,7 +273,40 @@ public class ShoppingCartActivity extends ActionBarActivity {
                                 BCUtil.generateRandomUUID().replace("-", ""), "BeeCloud-Android", mapOptional, new BCCallback() {
                                     @Override
                                     public void done(BCResult bcResult) {
-                                        Log.i(TAG, "reqWXPaymentAsync:" + bcResult.isSuccess() + "|" + bcResult.getMsgInfo());
+                                        int errorCode = -6;
+                                        String result = "支付失败";
+                                        try {
+                                            errorCode = Integer.valueOf(bcResult.getMsgInfo());
+                                        } catch (Exception ex) {
+                                        }
+
+                                        switch (errorCode) {
+                                            case BaseResp.ErrCode.ERR_OK:
+                                                result = "正确返回";
+                                                break;
+                                            case BaseResp.ErrCode.ERR_USER_CANCEL:
+                                                result = "用户取消";
+                                                break;
+                                            case BaseResp.ErrCode.ERR_AUTH_DENIED:
+                                                result = "认证被否决";
+                                                break;
+                                            case BaseResp.ErrCode.ERR_COMM:
+                                                result = "一般错误";
+                                                break;
+                                            case BaseResp.ErrCode.ERR_UNSUPPORT:
+                                                result = "不支持错误";
+                                                break;
+                                            case BaseResp.ErrCode.ERR_SENT_FAILED:
+                                                result = "发送失败";
+                                                break;
+                                            case -6:    //自定义
+                                                result = "调起微信支付";
+                                                break;
+                                            default:
+                                                result = "支付失败";
+                                                break;
+                                        }
+                                        Log.i(TAG, "reqWXPaymentAsync:" + bcResult.isSuccess() + "|" + bcResult.getMsgInfo() + "|" + result);
                                     }
                                 });
                         break;
@@ -292,19 +337,31 @@ public class ShoppingCartActivity extends ActionBarActivity {
                             return;
                         }
                         mapOptional.put(optionalKey, optionalValue);
-                        BCPay.getInstance(ShoppingCartActivity.this).reqUnionPaymentAsync("Android-UPPay", "Android-UPPay-body",
+                        /*BCPay.getInstance(ShoppingCartActivity.this).reqUnionPaymentByAPKAsync("Android-UPPay", "Android-UPPay-body",
                                 BCUtil.generateRandomUUID().replace("-", ""), "1", mapOptional, new BCCallback() {
                                     @Override
                                     public void done(BCResult bcResult) {
                                         Log.i(TAG, "btnUPPay:" + bcResult.isSuccess() + "|" + bcResult.getMsgInfo());
+                                        int ret = -1;
+                                        try {
+                                            ret = Integer.valueOf(bcResult.getMsgInfo());
 
-                                        int ret = Integer.valueOf(bcResult.getMsgInfo());
-                                        if (ret == PLUGIN_NEED_UPGRADE || ret == PLUGIN_NOT_INSTALLED) {
-                                            // 需要重新安装控件
-                                            Message msg = mHandler.obtainMessage();
-                                            msg.what = 3;
-                                            mHandler.sendMessage(msg);
+                                            if (ret == PLUGIN_NEED_UPGRADE || ret == PLUGIN_NOT_INSTALLED) {
+                                                // 需要重新安装控件
+                                                Message msg = mHandler.obtainMessage();
+                                                msg.what = 3;
+                                                mHandler.sendMessage(msg);
+                                            }
+                                        } catch (Exception ex) {
+                                            Log.d(TAG, bcResult.getMsgInfo());
                                         }
+                                    }
+                                });*/
+                        BCPay.getInstance(ShoppingCartActivity.this).reqUnionPaymentByJARAsync("Android-UPPay", "Android-UPPay-body",
+                                BCUtil.generateRandomUUID().replace("-", ""), "1", mapOptional, new BCCallback() {
+                                    @Override
+                                    public void done(BCResult bcResult) {
+                                        Log.i(TAG, "btnUPPay:" + bcResult.isSuccess() + "|" + bcResult.getMsgInfo());
                                     }
                                 });
                         break;

@@ -92,12 +92,15 @@
     <orderEntry type="library" exported="" name="alipaysecsdk" level="project" />
     <orderEntry type="library" exported="" name="UPPayAssistEx" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-22.0.0" level="project" />
+    <orderEntry type="library" exported="" name="x86" level="project" />
     <orderEntry type="library" exported="" name="beecloud" level="project" />
     <orderEntry type="library" exported="" name="libammsdk" level="project" />
-    <orderEntry type="library" exported="" name="core-3.2.0" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-22.0.0" level="project" />
+    <orderEntry type="library" exported="" name="armeabi-v7a" level="project" />
     <orderEntry type="library" exported="" name="zxing-3.2.0" level="project" />
     <orderEntry type="library" exported="" name="UPPayPluginEx" level="project" />
+    <orderEntry type="library" exported="" name="armeabi" level="project" />
+    <orderEntry type="library" exported="" name="mips" level="project" />
     <orderEntry type="module" module-name="dialogplus" exported="" />
   </component>
 </module>

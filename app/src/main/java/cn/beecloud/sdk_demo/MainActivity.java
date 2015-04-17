@@ -8,7 +8,6 @@ package cn.beecloud.sdk_demo;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -50,7 +49,6 @@ public class MainActivity extends BCActivity {
     public static final int PLUGIN_NEED_UPGRADE = 2;
 
     Button btnStartPay;
-    Button btnOrderList;
 
     private Handler mHandler;
 
@@ -120,14 +118,6 @@ public class MainActivity extends BCActivity {
             public void onClick(View v) {
                 //通过TOP, BOTTOM, CENTER控制弹出框显示位置
                 showDialog(DialogPlus.Gravity.BOTTOM);
-            }
-        });
-        btnOrderList = (Button) findViewById(R.id.btnOrderList);
-        btnOrderList.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, PayActivity.class);
-                startActivity(i);
             }
         });
     }
@@ -212,7 +202,7 @@ public class MainActivity extends BCActivity {
                             return;
                         }
                         mapOptional.put(optionalKey, optionalValue);
-                        BCPay.getInstance(MainActivity.this).reqUnionPaymentAsync("Android-UPPay", "Android-UPPay-body",
+                        /*BCPay.getInstance(MainActivity.this).reqUnionPaymentAsync("Android-UPPay", "Android-UPPay-body",
                                 BCUtil.generateRandomUUID().replace("-", ""), "1", mapOptional, new BCCallback() {
                                     @Override
                                     public void done(BCResult bcResult) {
@@ -225,6 +215,13 @@ public class MainActivity extends BCActivity {
                                             msg.what = 3;
                                             mHandler.sendMessage(msg);
                                         }
+                                    }
+                                });*/
+                        BCPay.getInstance(MainActivity.this).reqUnionPaymentByJARAsync("Android-UPPay", "Android-UPPay-body",
+                                BCUtil.generateRandomUUID().replace("-", ""), "1", mapOptional, new BCCallback() {
+                                    @Override
+                                    public void done(BCResult bcResult) {
+                                        Log.i(TAG, "btnUPPay:" + bcResult.isSuccess() + "|" + bcResult.getMsgInfo());
                                     }
                                 });
                         break;

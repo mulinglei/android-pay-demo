@@ -40,9 +40,6 @@
         <activity
             android:name=".SecondActivity"
             android:label="@string/title_activity_second" />
-        <activity
-            android:name=".PayActivity"
-            android:label="@string/title_activity_pay" />
         <!-- alipay sdk begin -->
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"
@@ -55,6 +52,13 @@
         <activity
             android:name=".BalanceActivity"
             android:label="@string/title_activity_balance"></activity>
+
+        <activity
+            android:name="com.unionpay.uppay.PayActivity"
+            android:screenOrientation="portrait"
+            android:configChanges="orientation|keyboardHidden"
+            android:excludeFromRecents="true"
+            android:windowSoftInputMode="adjustResize" />
     </application>
 
 </manifest>

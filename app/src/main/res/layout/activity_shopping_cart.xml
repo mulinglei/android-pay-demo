@@ -12,7 +12,8 @@
     <ListView
         android:id="@+id/lstViewShoppingCart"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" android:layout_marginBottom="200dp"/>
+        android:layout_height="match_parent"
+        android:layout_marginBottom="200dp" />
 
     <ImageView
         android:id="@+id/imageQRCode"
@@ -20,16 +21,28 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="80dp"/>
+        android:layout_marginBottom="80dp" />
 
     <Button
-        android:id="@+id/btnShopping"
-        android:layout_width="200dp"
+        android:id="@+id/btnPay"
+        android:layout_width="100dp"
         android:layout_height="50dp"
         android:text="结算"
         android:textSize="20dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
         android:textColor="#ffffff"
-        android:background="#007edf"/>
+        android:background="#007edf"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="30dp" />
+
+    <Button
+        android:id="@+id/btnQueryAndRefund"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:text="查询/退款"
+        android:textSize="20dp"
+        android:textColor="#ffffff"
+        android:background="#007edf"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@id/btnPay"
+        android:layout_marginLeft="60dp" />
 </RelativeLayout>
