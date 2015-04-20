@@ -336,6 +336,8 @@ public class ShoppingCartActivity extends ActionBarActivity {
                         BCPay instance = BCPay.getInstance(ShoppingCartActivity.this);
                         Log.i(TAG, "isWXAppInstalledAndSupported: " + String.valueOf(instance.isWXAppInstalledAndSupported()));
                         Log.i(TAG, "isWXPaySupported: " + String.valueOf(instance.isWXPaySupported()));
+                        Log.i(TAG, "isWXAppInstalled: " + String.valueOf(instance.isWXAppInstalled()));
+                        Log.i(TAG, "isWXAppSupported: " + String.valueOf(instance.isWXAppSupported()));
                         BCPay.getInstance(ShoppingCartActivity.this).reqWXPaymentV3Async("test", "1",
                                 BCUtil.generateRandomUUID().replace("-", ""), "BeeCloud-Android", mapOptional, new BCCallback() {
                                     @Override

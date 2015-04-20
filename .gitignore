@@ -80,3 +80,4 @@ $RECYCLE.BIN/
 .gradle/2.2.1/taskArtifacts/fileSnapshots.bin
 .gradle/2.2.1/taskArtifacts/outputFileStates.bin
 .gradle/2.2.1/taskArtifacts/taskArtifacts.bin
+.idea/workspace.xml
