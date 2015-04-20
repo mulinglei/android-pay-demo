@@ -16,11 +16,19 @@
         android:layout_marginBottom="200dp" />
 
     <ImageView
-        android:id="@+id/imageQRCode"
+        android:id="@+id/imageWXQRCode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="100dp"
+        android:layout_marginBottom="80dp" />
+
+    <ImageView
+        android:id="@+id/imageAliQRCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_toRightOf="@id/imageWXQRCode"
         android:layout_marginBottom="80dp" />
 
     <Button

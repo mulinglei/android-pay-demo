@@ -40,9 +40,13 @@ import java.util.Map;
 
 import cn.beecloud.BCAnalysis;
 import cn.beecloud.BCPay;
+import cn.beecloud.BCQRCodePay;
 import cn.beecloud.BCUtil;
+import cn.beecloud.BCUtilPrivate;
 import cn.beecloud.BeeCloud;
 import cn.beecloud.async.BCCallback;
+import cn.beecloud.async.BCMapCallback;
+import cn.beecloud.async.BCMapResult;
 import cn.beecloud.async.BCResult;
 
 
@@ -55,8 +59,10 @@ public class ShoppingCartActivity extends ActionBarActivity {
     private static final String TAG = "ShoppingCartActivity";
     Button btnShopping;
     Button btnQueryAndRefund;
-    ImageView imageQRCode;
-    Bitmap bitmapQRCode;
+    ImageView imageWXQRCode;
+    ImageView imageAliQRCode;
+    Bitmap bitmapWXQRCode;
+    Bitmap bitmapAliQRCode;
     private String[] names = new String[]{
             "衣服", "裤子", "鞋子",
     };
@@ -117,7 +123,9 @@ public class ShoppingCartActivity extends ActionBarActivity {
                             });
                     builder.create().show();
                 } else if (msg.what == 4) {
-                    imageQRCode.setImageBitmap(bitmapQRCode);
+                    imageWXQRCode.setImageBitmap(bitmapWXQRCode);
+                } else if (msg.what == 5) {
+                    imageAliQRCode.setImageBitmap(bitmapAliQRCode);
                 }
                 return true;
             }
@@ -157,17 +165,19 @@ public class ShoppingCartActivity extends ActionBarActivity {
         ListView listView = (ListView) findViewById(R.id.lstViewShoppingCart);
         listView.setAdapter(adapter);
 
+        imageWXQRCode = (ImageView) findViewById(R.id.imageWXQRCode);
+        imageAliQRCode = (ImageView) findViewById(R.id.imageAliQRCode);
+
         //微信扫码支付测试
-        /*imageQRCode = (ImageView) findViewById(R.id.imageQRCode);
         BCQRCodePay.getInstance().reqWXQRCodePayAsync("web wxpay", "1",
-                BCUtil.generateRandomUUID().toString().replace("-", ""), 300, 300,
+                BCUtil.generateRandomUUID().toString().replace("-", ""),
                 new BCCallback() {
                     @Override
                     public void done(BCResult result) {
                         if (result.isSuccess()) {
                             String code_url = result.getMsgInfo();
                             try {
-                                bitmapQRCode = createQRImage(code_url, 200, 200);
+                                bitmapWXQRCode = BCUtil.createQRImage(code_url, 250, 250);
                             } catch (WriterException e) {
                                 e.printStackTrace();
                             }
@@ -177,7 +187,66 @@ public class ShoppingCartActivity extends ActionBarActivity {
                         }
 
                     }
-                }); */
+                });
+
+        //支付宝扫码支付测试
+        imageAliQRCode = (ImageView) findViewById(R.id.imageAliQRCode);
+        Map<String, Object> mapExt = new HashMap<>();
+        mapExt.put("single_limit", "2");
+        mapExt.put("user_limit", "3");
+        mapExt.put("logo_name", "BeeCloud");
+
+        Map<String, Object> mapSKU = new HashMap<>();
+        mapSKU.put("sku_id", "002");
+        mapSKU.put("sku_name", "薯条");
+        mapSKU.put("sku_price", "9.00");
+        mapSKU.put("sku_inventory", "500");
+
+        Map<String, Object> mapGoodsInfo = new HashMap<>();
+        mapGoodsInfo.put("id", "123456");
+        mapGoodsInfo.put("name", "商品名称");
+        mapGoodsInfo.put("price", "0.01");
+        //商品有效期结束时间必须大于当前时间，且必须大于开始时间。
+        mapGoodsInfo.put("expiry_date", "2015-04-11 01:01:01|2015-09-19 01:02:59");
+        mapGoodsInfo.put("desc", "商品描述");
+        //mapGoodsInfo.put("sku_title","请选择颜色：");
+        //mapGoodsInfo.put("sku",mapSKU);
+
+        Map<String, Object> mapBizData = new HashMap<>();
+        mapBizData.put("memo", "备注");
+        mapBizData.put("ext_info", mapExt);
+        mapBizData.put("goods_info", mapGoodsInfo);
+        mapBizData.put("need_address", "F");
+        mapBizData.put("trade_type", "1");
+        //mapBizData.put("return_url", "http://www.test.com/return_ulr.aspx");
+        //mapBizData.put("notify_url", "http://www.test.com/notify_url.aspx");
+        //mapBizData.put("query_url", "http://www.test.com/query_url.aspx");
+
+        /**
+         Map的结构示例：
+         resultCode="0.0"
+         result="SUCCESS"
+         qr_img_url="https://mobilecodec.alipay.com/show.htm?code=gd6rvgyzk893nja178&picSize=S"
+         errMsg=""
+         qrcode="https://qr.alipay.com/gd6rvgyzk893nja178"
+         */
+        BCQRCodePay.getInstance().reqAliQRCodePayAsync(BCUtilPrivate.mAliQRTypeAdd, "", mapBizData,
+                new BCMapCallback() {
+
+                    @Override
+                    public void done(BCMapResult bcMapResult) {
+                        try {
+                            String qr_img_url = String.valueOf(bcMapResult.getStringObjectMap().get("qr_img_url"));
+                            bitmapAliQRCode = BCUtil.getHttpBitmap(qr_img_url);
+
+                            Message msg = mHandler.obtainMessage();
+                            msg.what = 5;
+                            mHandler.sendMessage(msg);
+                        } catch (Exception ex) {
+                            Log.i(TAG, ex.getMessage());
+                        }
+                    }
+                });
     }
 
     /**
