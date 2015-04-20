@@ -9,14 +9,14 @@
         android:id="@+id/imageView"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:paddingBottom="5dp"
         android:contentDescription="ICON"
+        android:paddingBottom="5dp"
         android:paddingLeft="16dp" />
 
     <RelativeLayout
         android:layout_width="0dp"
-        android:layout_weight="1"
         android:layout_height="80dp"
+        android:layout_weight="1"
         android:paddingBottom="5dp"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
@@ -24,17 +24,17 @@
 
         <TextView
             android:id="@+id/txtViewName"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="CONTENT"
-            android:textSize="18dp"
             android:paddingBottom="5dp"
-            android:layout_width="wrap_content" />
+            android:text="CONTENT"
+            android:textSize="18dp" />
 
         <TextView
             android:id="@+id/txtViewDesc"
             android:layout_width="wrap_content"
-            android:layout_below="@+id/txtViewName"
             android:layout_height="wrap_content"
+            android:layout_below="@+id/txtViewName"
             android:text="DESC"
             android:textSize="14dp" />
     </RelativeLayout>
@@ -45,10 +45,10 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_toRightOf="@id/imageView"
-        android:text="1"
         android:inputType="number"
-        android:textAlignment="center"
-        android:padding="4dp" />
+        android:padding="4dp"
+        android:text="1"
+        android:textAlignment="center" />
 
 
 </LinearLayout>
