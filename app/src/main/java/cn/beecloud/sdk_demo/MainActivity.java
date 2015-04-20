@@ -41,11 +41,13 @@ import cn.beecloud.async.BCResult;
 
 public class MainActivity extends BCActivity {
 
+    private static final String TAG = "MainActivity";
+
     // 银联支付控件的状态
     public static final int PLUGIN_VALID = 0;
     public static final int PLUGIN_NOT_INSTALLED = -1;
     public static final int PLUGIN_NEED_UPGRADE = 2;
-    private static final String TAG = "MainActivity";
+
     Button btnStartPay;
 
     private Handler mHandler;

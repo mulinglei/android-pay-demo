@@ -159,6 +159,7 @@ public class DialogPlus {
      *
      * @param gravity       the gravity of the dialog
      * @param isInAnimation determine if is in or out animation. true when is is
+     *
      * @return the id of the animation resource
      */
     private int getAnimationResource(Gravity gravity, boolean isInAnimation) {
@@ -181,6 +182,7 @@ public class DialogPlus {
      * @param gravity       the gravity of the dialog
      * @param margin        the value defined in the builder
      * @param minimumMargin the minimum margin when gravity center is selected
+     *
      * @return the value of the margin
      */
     private int getMargin(Gravity gravity, int margin, int minimumMargin) {
@@ -328,7 +330,8 @@ public class DialogPlus {
     /**
      * it is called when the content view is created
      *
-     * @param inflater used to inflate the content of the dialog
+     * @param inflater  used to inflate the content of the dialog
+     *
      * @return any view which is passed
      */
     private View createView(LayoutInflater inflater) {
@@ -403,6 +406,7 @@ public class DialogPlus {
      * It is used to create content
      *
      * @param holder the holder from the builder
+     *
      * @return ListHolder if setContentHolder is not called
      */
     private Holder getHolder(Holder holder) {
@@ -482,10 +486,8 @@ public class DialogPlus {
         private OnClickListener onClickListener;
 
         private boolean isCancelable = true;
-
         private Builder() {
-        }
-
+        }        private int backgroundColorResourceId = INVALID;
         /**
          * Initialize the builder with a valid context in order to inflate the dialog
          */
@@ -494,7 +496,7 @@ public class DialogPlus {
                 throw new NullPointerException("Context may not be null");
             }
             this.context = context;
-        }
+        }        private int headerViewResourceId = INVALID;
 
         /**
          * Set the adapter that will be used when ListHolder or GridHolder are passed
@@ -505,7 +507,7 @@ public class DialogPlus {
             }
             this.adapter = adapter;
             return this;
-        }        private int backgroundColorResourceId = INVALID;
+        }        private int footerViewResourceId = INVALID;
 
         /**
          * Set the footer view using the id of the layout resource
@@ -513,7 +515,7 @@ public class DialogPlus {
         public Builder setFooter(int resourceId) {
             this.footerViewResourceId = resourceId;
             return this;
-        }
+        }        private int inAnimation = INVALID;
 
         /**
          * Set the footer view using a view
@@ -521,7 +523,7 @@ public class DialogPlus {
         public Builder setFooter(View view) {
             this.footerView = view;
             return this;
-        }
+        }        private int outAnimation = INVALID;
 
         /**
          * Set the header view using the id of the layout resource
@@ -529,7 +531,7 @@ public class DialogPlus {
         public Builder setHeader(int resourceId) {
             this.headerViewResourceId = resourceId;
             return this;
-        }        private int headerViewResourceId = INVALID;
+        }        private int marginLeft = INVALID;
 
         /**
          * Set the header view using a view
@@ -537,7 +539,7 @@ public class DialogPlus {
         public Builder setHeader(View view) {
             this.headerView = view;
             return this;
-        }
+        }        private int marginTop = INVALID;
 
         /**
          * Define if the dialog is cancelable and should be closed when back pressed or click outside is pressed
@@ -545,7 +547,7 @@ public class DialogPlus {
         public Builder setCancelable(boolean isCancelable) {
             this.isCancelable = isCancelable;
             return this;
-        }
+        }        private int marginRight = INVALID;
 
         /**
          * Set the content of the dialog by passing one of the provided Holders
@@ -553,7 +555,7 @@ public class DialogPlus {
         public Builder setContentHolder(Holder holder) {
             this.holder = holder;
             return this;
-        }        private int footerViewResourceId = INVALID;
+        }        private int marginBottom = INVALID;
 
         /**
          * Set background color for your dialog. If no resource is passed 'white' will be used
@@ -577,7 +579,7 @@ public class DialogPlus {
         public Builder setInAnimation(int inAnimResource) {
             this.inAnimation = inAnimResource;
             return this;
-        }        private int inAnimation = INVALID;
+        }
 
         /**
          * Customize the out animation by passing an animation resource
@@ -605,7 +607,7 @@ public class DialogPlus {
             this.marginRight = right;
             this.marginBottom = bottom;
             return this;
-        }        private int outAnimation = INVALID;
+        }
 
         /**
          * Set an item click listener when list or grid holder is chosen. In that way you can have callbacks when one
@@ -630,25 +632,23 @@ public class DialogPlus {
          */
         public DialogPlus create() {
             return new DialogPlus(this);
-        }        private int marginLeft = INVALID;
+        }
 
 
 
 
 
-        private int marginTop = INVALID;
 
 
 
 
 
-        private int marginRight = INVALID;
 
 
 
 
 
-        private int marginBottom = INVALID;
+
 
 
     }
