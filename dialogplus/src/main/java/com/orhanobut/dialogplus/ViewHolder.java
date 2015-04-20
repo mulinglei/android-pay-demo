@@ -13,15 +13,12 @@ public class ViewHolder implements Holder {
 
     private static final String TAG = ViewHolder.class.getSimpleName();
     private static final int INVALID = -1;
-
+    private int viewResourceId = INVALID;
     private int backgroundColor;
-
     private ViewGroup headerContainer;
     private ViewGroup footerContainer;
     private View.OnKeyListener keyListener;
-
     private View contentView;
-    private int viewResourceId = INVALID;
 
     public ViewHolder(int viewResourceId) {
         this.viewResourceId = viewResourceId;

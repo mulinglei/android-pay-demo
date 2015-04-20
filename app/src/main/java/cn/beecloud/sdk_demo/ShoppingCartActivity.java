@@ -48,29 +48,24 @@ import cn.beecloud.async.BCResult;
 
 public class ShoppingCartActivity extends ActionBarActivity {
 
-    private static final String TAG = "ShoppingCartActivity";
-
-    private String[] names = new String[]{
-            "衣服", "裤子", "鞋子",
-    };
-
-    private String[] descs = new String[]{
-            "我的新衣服", "我的新裤子", "我的新鞋子"
-    };
-
-    private int[] imageIds = new int[]{
-            R.drawable.yifu, R.drawable.kuzi, R.drawable.xiezi
-    };
-
     // 银联支付控件的状态
     public static final int PLUGIN_VALID = 0;
     public static final int PLUGIN_NOT_INSTALLED = -1;
     public static final int PLUGIN_NEED_UPGRADE = 2;
-
+    private static final String TAG = "ShoppingCartActivity";
     Button btnShopping;
     Button btnQueryAndRefund;
     ImageView imageQRCode;
     Bitmap bitmapQRCode;
+    private String[] names = new String[]{
+            "衣服", "裤子", "鞋子",
+    };
+    private String[] descs = new String[]{
+            "我的新衣服", "我的新裤子", "我的新鞋子"
+    };
+    private int[] imageIds = new int[]{
+            R.drawable.yifu, R.drawable.kuzi, R.drawable.xiezi
+    };
     private Handler mHandler;
 
     @Override
@@ -269,6 +264,9 @@ public class ShoppingCartActivity extends ActionBarActivity {
                                     }
                                 });*/
                         //新版本微信
+                        BCPay instance = BCPay.getInstance(ShoppingCartActivity.this);
+                        Log.i(TAG, "isWXAppInstalledAndSupported: " + String.valueOf(instance.isWXAppInstalledAndSupported()));
+                        Log.i(TAG, "isWXPaySupported: " + String.valueOf(instance.isWXPaySupported()));
                         BCPay.getInstance(ShoppingCartActivity.this).reqWXPaymentV3Async("test", "1",
                                 BCUtil.generateRandomUUID().replace("-", ""), "BeeCloud-Android", mapOptional, new BCCallback() {
                                     @Override
@@ -337,7 +335,7 @@ public class ShoppingCartActivity extends ActionBarActivity {
                             return;
                         }
                         mapOptional.put(optionalKey, optionalValue);
-                        /*BCPay.getInstance(ShoppingCartActivity.this).reqUnionPaymentByAPKAsync("Android-UPPay", "Android-UPPay-body",
+                        BCPay.getInstance(ShoppingCartActivity.this).reqUnionPaymentByAPKAsync("Android-UPPay", "Android-UPPay-body",
                                 BCUtil.generateRandomUUID().replace("-", ""), "1", mapOptional, new BCCallback() {
                                     @Override
                                     public void done(BCResult bcResult) {
@@ -356,14 +354,14 @@ public class ShoppingCartActivity extends ActionBarActivity {
                                             Log.d(TAG, bcResult.getMsgInfo());
                                         }
                                     }
-                                });*/
-                        BCPay.getInstance(ShoppingCartActivity.this).reqUnionPaymentByJARAsync("Android-UPPay", "Android-UPPay-body",
+                                });
+                        /*BCPay.getInstance(ShoppingCartActivity.this).reqUnionPaymentByJARAsync("Android-UPPay", "Android-UPPay-body",
                                 BCUtil.generateRandomUUID().replace("-", ""), "1", mapOptional, new BCCallback() {
                                     @Override
                                     public void done(BCResult bcResult) {
                                         Log.i(TAG, "btnUPPay:" + bcResult.isSuccess() + "|" + bcResult.getMsgInfo());
                                     }
-                                });
+                                });*/
                         break;
                 }
             }
