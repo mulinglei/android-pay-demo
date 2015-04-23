@@ -200,28 +200,8 @@ public class MainActivity extends BCActivity {
                             return;
                         }
                         mapOptional.put(optionalKey, optionalValue);
-                        /*BCPay.getInstance(MainActivity.this).reqUnionPaymentAsync("Android-UPPay", "Android-UPPay-body",
-                                BCUtil.generateRandomUUID().replace("-", ""), "1", mapOptional, new BCCallback() {
-                                    @Override
-                                    public void done(BCResult bcResult) {
-                                        Log.i(TAG, "btnUPPay:" + bcResult.isSuccess() + "|" + bcResult.getMsgInfo());
 
-                                        int ret = Integer.valueOf(bcResult.getMsgInfo());
-                                        if (ret == PLUGIN_NEED_UPGRADE || ret == PLUGIN_NOT_INSTALLED) {
-                                            // 需要重新安装控件
-                                            Message msg = mHandler.obtainMessage();
-                                            msg.what = 3;
-                                            mHandler.sendMessage(msg);
-                                        }
-                                    }
-                                });*/
-                        BCPay.getInstance(MainActivity.this).reqUnionPaymentByJARAsync("Android-UPPay", "Android-UPPay-body",
-                                BCUtil.generateRandomUUID().replace("-", ""), "1", mapOptional, new BCCallback() {
-                                    @Override
-                                    public void done(BCResult bcResult) {
-                                        Log.i(TAG, "btnUPPay:" + bcResult.isSuccess() + "|" + bcResult.getMsgInfo());
-                                    }
-                                });
+
                         break;
                 }
             }

@@ -19,34 +19,23 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.EncodeHintType;
-import com.google.zxing.WriterException;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.qrcode.QRCodeWriter;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.Holder;
 import com.orhanobut.dialogplus.ListHolder;
 import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.OnItemClickListener;
-import com.tencent.mm.sdk.modelbase.BaseResp;
 import com.unionpay.UPPayAssistEx;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
 import cn.beecloud.BCAnalysis;
 import cn.beecloud.BCPay;
-import cn.beecloud.BCQRCodePay;
 import cn.beecloud.BCUtil;
-import cn.beecloud.BCUtilPrivate;
 import cn.beecloud.BeeCloud;
 import cn.beecloud.async.BCCallback;
-import cn.beecloud.async.BCMapCallback;
-import cn.beecloud.async.BCMapResult;
 import cn.beecloud.async.BCResult;
 
 
@@ -54,8 +43,8 @@ public class ShoppingCartActivity extends ActionBarActivity {
 
     // 银联支付控件的状态
     public static final int PLUGIN_VALID = 0;
-    public static final int PLUGIN_NOT_INSTALLED = -1;
-    public static final int PLUGIN_NEED_UPGRADE = 2;
+    public static final String PLUGIN_NOT_INSTALLED = "-1";
+    public static final String PLUGIN_NEED_UPGRADE = "2";
     private static final String TAG = "ShoppingCartActivity";
     Button btnShopping;
     Button btnQueryAndRefund;
@@ -78,9 +67,10 @@ public class ShoppingCartActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopping_cart);
+
         //BeeCloud
         BeeCloud.setAppIdAndSecret(this, "c5d1cba1-5e3f-4ba0-941d-9b0a371fe719", "39a7a518-9ac8-4a9e-87bc-7885f33cf18c");
-        //BeeCloud.setNetworkTimeout(5000);
+        BeeCloud.setNetworkTimeout(10000);
 
         BCAnalysis.setUserId("BeeCloud Android User！");
         BCAnalysis.setUserGender(true);
@@ -139,14 +129,14 @@ public class ShoppingCartActivity extends ActionBarActivity {
             }
         });
 
-        btnQueryAndRefund = (Button) findViewById(R.id.btnQueryAndRefund);
+         /*btnQueryAndRefund = (Button) findViewById(R.id.btnQueryAndRefund);
         btnQueryAndRefund.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(ShoppingCartActivity.this, MainActivity.class);
-                startActivity(intent);
+           Intent intent = new Intent(ShoppingCartActivity.this, MainActivity.class);
+            startActivity(intent);
             }
-        });
+        });*/
 
         List<Map<String, Object>> listItems = new ArrayList<>();
         for (int i = 0; i < names.length; i++) {
@@ -169,7 +159,7 @@ public class ShoppingCartActivity extends ActionBarActivity {
         imageAliQRCode = (ImageView) findViewById(R.id.imageAliQRCode);
 
         //微信扫码支付测试
-        BCQRCodePay.getInstance().reqWXQRCodePayAsync("web wxpay", "1",
+        /*BCQRCodePay.getInstance().reqWXQRCodePayAsync("web wxpay", "1",
                 BCUtil.generateRandomUUID().toString().replace("-", ""),
                 new BCCallback() {
                     @Override
@@ -179,7 +169,7 @@ public class ShoppingCartActivity extends ActionBarActivity {
                             try {
                                 bitmapWXQRCode = BCUtil.createQRImage(code_url, 250, 250);
                             } catch (WriterException e) {
-                                e.printStackTrace();
+                                Log.e(TAG, e.getMessage());
                             }
                             Message msg = mHandler.obtainMessage();
                             msg.what = 4;
@@ -187,7 +177,7 @@ public class ShoppingCartActivity extends ActionBarActivity {
                         }
 
                     }
-                });
+                });*/
 
         //支付宝扫码支付测试
         imageAliQRCode = (ImageView) findViewById(R.id.imageAliQRCode);
@@ -230,7 +220,7 @@ public class ShoppingCartActivity extends ActionBarActivity {
          errMsg=""
          qrcode="https://qr.alipay.com/gd6rvgyzk893nja178"
          */
-        BCQRCodePay.getInstance().reqAliQRCodePayAsync(BCUtilPrivate.mAliQRTypeAdd, "", mapBizData,
+       /*BCQRCodePay.getInstance().reqAliQRCodePayAsync(BCUtilPrivate.mAliQRTypeAdd, "", mapBizData,
                 new BCMapCallback() {
 
                     @Override
@@ -246,7 +236,7 @@ public class ShoppingCartActivity extends ActionBarActivity {
                             Log.i(TAG, ex.getMessage());
                         }
                     }
-                });
+                });*/
     }
 
     /**
@@ -284,7 +274,6 @@ public class ShoppingCartActivity extends ActionBarActivity {
         builder.create().show();
     }
 
-
     private void showDialog(DialogPlus.Gravity gravity) {
 
         Holder holder = new ListHolder();
@@ -294,13 +283,13 @@ public class ShoppingCartActivity extends ActionBarActivity {
             public void onClick(DialogPlus dialog, View view) {
                 switch (view.getId()) {
                     case R.id.header_container:
-                        Toast.makeText(ShoppingCartActivity.this, "Header clicked", Toast.LENGTH_LONG).show();
+                        Toast.makeText(ShoppingCartActivity.this, "Header clicked", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.footer_confirm_button:
-                        Toast.makeText(ShoppingCartActivity.this, "Confirm button clicked", Toast.LENGTH_LONG).show();
+                        Toast.makeText(ShoppingCartActivity.this, "Confirm button clicked", Toast.LENGTH_SHORT).show();
                         break;
                     case R.id.footer_close_button:
-                        Toast.makeText(ShoppingCartActivity.this, "Close button clicked", Toast.LENGTH_LONG).show();
+                        Toast.makeText(ShoppingCartActivity.this, "Close button clicked", Toast.LENGTH_SHORT).show();
                         break;
                 }
                 dialog.dismiss();
@@ -323,16 +312,6 @@ public class ShoppingCartActivity extends ActionBarActivity {
                             return;
                         }
                         mapOptional.put(optionalKey, optionalValue);
-
-                        //老版本微信
-                         /*BCPay.getInstance(ShoppingCartActivity.this).reqWXPaymentV2Async("test", "1",
-                                BCUtil.generateRandomUUID().replace("-", ""), "BeeCloud-Android", mapOptional, new BCPayCallback() {
-                                    @Override
-                                    public void done(boolean b, String s) {
-                                        Log.i(TAG, "reqWXPaymentAsync:" + b + "|" + s);
-                                    }
-                                });*/
-                        //新版本微信
                         BCPay instance = BCPay.getInstance(ShoppingCartActivity.this);
                         Log.i(TAG, "isWXAppInstalledAndSupported: " + String.valueOf(instance.isWXAppInstalledAndSupported()));
                         Log.i(TAG, "isWXPaySupported: " + String.valueOf(instance.isWXPaySupported()));
@@ -342,42 +321,10 @@ public class ShoppingCartActivity extends ActionBarActivity {
                                 BCUtil.generateRandomUUID().replace("-", ""), "BeeCloud-Android", mapOptional, new BCCallback() {
                                     @Override
                                     public void done(BCResult bcResult) {
-                                        int errorCode = -6;
-                                        String result = "支付失败";
-                                        try {
-                                            errorCode = Integer.valueOf(bcResult.getMsgInfo());
-                                        } catch (Exception ex) {
-                                        }
-
-                                        switch (errorCode) {
-                                            case BaseResp.ErrCode.ERR_OK:
-                                                result = "正确返回";
-                                                break;
-                                            case BaseResp.ErrCode.ERR_USER_CANCEL:
-                                                result = "用户取消";
-                                                break;
-                                            case BaseResp.ErrCode.ERR_AUTH_DENIED:
-                                                result = "认证被否决";
-                                                break;
-                                            case BaseResp.ErrCode.ERR_COMM:
-                                                result = "一般错误";
-                                                break;
-                                            case BaseResp.ErrCode.ERR_UNSUPPORT:
-                                                result = "不支持错误";
-                                                break;
-                                            case BaseResp.ErrCode.ERR_SENT_FAILED:
-                                                result = "发送失败";
-                                                break;
-                                            case -6:    //自定义
-                                                result = "调起微信支付";
-                                                break;
-                                            default:
-                                                result = "支付失败";
-                                                break;
-                                        }
-                                        Log.i(TAG, "reqWXPaymentAsync:" + bcResult.isSuccess() + "|" + bcResult.getMsgInfo() + "|" + result);
+                                        Log.i(TAG, "reqWXPaymentAsync:" + bcResult.isSuccess() + "|" + bcResult.getMsgInfo());
                                     }
                                 });
+                        ;
                         break;
                     case "支付宝支付":
                         mapOptional = new HashMap<>();
@@ -394,7 +341,7 @@ public class ShoppingCartActivity extends ActionBarActivity {
                                 "订单标题", "对一笔交易的具体描述信息", "0.01", mapOptional, new BCCallback() {
                                     @Override
                                     public void done(BCResult bcResult) {
-                                        Log.d(TAG, "支付宝支付:" + bcResult.isSuccess() + "|" + bcResult.getMsgInfo());
+                                        Log.i(TAG, "支付宝支付:" + bcResult.isSuccess() + "|" + bcResult.getMsgInfo());
                                     }
                                 });
                         break;
@@ -411,28 +358,14 @@ public class ShoppingCartActivity extends ActionBarActivity {
                                     @Override
                                     public void done(BCResult bcResult) {
                                         Log.i(TAG, "btnUPPay:" + bcResult.isSuccess() + "|" + bcResult.getMsgInfo());
-                                        int ret = -1;
-                                        try {
-                                            ret = Integer.valueOf(bcResult.getMsgInfo());
-
-                                            if (ret == PLUGIN_NEED_UPGRADE || ret == PLUGIN_NOT_INSTALLED) {
-                                                // 需要重新安装控件
-                                                Message msg = mHandler.obtainMessage();
-                                                msg.what = 3;
-                                                mHandler.sendMessage(msg);
-                                            }
-                                        } catch (Exception ex) {
-                                            Log.d(TAG, bcResult.getMsgInfo());
+                                        if (bcResult.getMsgInfo().equals(PLUGIN_NEED_UPGRADE) || bcResult.getMsgInfo().equals(PLUGIN_NOT_INSTALLED)) {
+                                            // 需要重新安装控件
+                                            Message msg = mHandler.obtainMessage();
+                                            msg.what = 3;
+                                            mHandler.sendMessage(msg);
                                         }
                                     }
                                 });
-                        /*BCPay.getInstance(ShoppingCartActivity.this).reqUnionPaymentByJARAsync("Android-UPPay", "Android-UPPay-body",
-                                BCUtil.generateRandomUUID().replace("-", ""), "1", mapOptional, new BCCallback() {
-                                    @Override
-                                    public void done(BCResult bcResult) {
-                                        Log.i(TAG, "btnUPPay:" + bcResult.isSuccess() + "|" + bcResult.getMsgInfo());
-                                    }
-                                });*/
                         break;
                 }
             }
@@ -442,11 +375,8 @@ public class ShoppingCartActivity extends ActionBarActivity {
         showCompleteDialog(holder, gravity, adapter, clickListener, itemClickListener);
     }
 
-    private void showCompleteDialog(Holder holder,
-                                    DialogPlus.Gravity gravity,
-                                    BaseAdapter adapter,
-                                    OnClickListener clickListener,
-                                    OnItemClickListener itemClickListener) {
+    private void showCompleteDialog(Holder holder, DialogPlus.Gravity gravity, BaseAdapter adapter,
+                                    OnClickListener clickListener, OnItemClickListener itemClickListener) {
         final DialogPlus dialog = new DialogPlus.Builder(this)
                 .setContentHolder(holder)
                 .setHeader(R.layout.header)
@@ -458,37 +388,6 @@ public class ShoppingCartActivity extends ActionBarActivity {
                 .setOnItemClickListener(itemClickListener)
                 .create();
         dialog.show();
-    }
-
-    /**
-     * 创建二维码
-     *
-     * @param url 要转换的地址或字符串,可以是中文
-     * @return 二维码图片
-     */
-    public Bitmap createQRImage(String url, int qrWidth, int qrHeight) throws WriterException {
-        Hashtable<EncodeHintType, String> hints = new Hashtable<EncodeHintType, String>();
-        hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
-
-        //图像数据转换，使用二维矩阵转换
-        BitMatrix bitMatrix = new QRCodeWriter().encode(url, BarcodeFormat.QR_CODE, qrWidth, qrHeight, hints);
-        int[] pixels = new int[qrWidth * qrHeight];
-        //按照二维码的算法，逐个生成二维码的图片，
-        //两个for循环是图片横列扫描的结果
-        for (int y = 0; y < qrHeight; y++) {
-            for (int x = 0; x < qrWidth; x++) {
-                if (bitMatrix.get(x, y)) {
-                    pixels[y * qrWidth + x] = 0xff000000;
-                } else {
-                    pixels[y * qrWidth + x] = 0xffffffff;
-                }
-            }
-        }
-        //生成二维码图片的格式，使用ARGB_8888
-        Bitmap bitmap = Bitmap.createBitmap(qrWidth, qrHeight, Bitmap.Config.ARGB_8888);
-        bitmap.setPixels(pixels, 0, qrWidth, 0, 0, qrWidth, qrHeight);
-
-        return bitmap;
     }
 
     @Override

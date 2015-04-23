@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -70,6 +69,5 @@ public class ShoppingAdapter extends BaseAdapter {
         TextView txtViewName;
         TextView txtViewDesc;
         ImageView imageView;
-        EditText editTextValue;
     }
 }
