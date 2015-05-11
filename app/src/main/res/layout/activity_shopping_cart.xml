@@ -8,7 +8,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="cn.beecloud.sdk_demo.ShoppingCartActivity">
 
-
     <ListView
         android:id="@+id/lstViewShoppingCart"
         android:layout_width="match_parent"
@@ -20,13 +19,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginLeft="100dp"
         android:layout_marginBottom="80dp" />
 
-    <ImageView
-        android:id="@+id/imageAliQRCode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <WebView
+        android:id="@+id/webView"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
         android:layout_alignParentBottom="true"
         android:layout_toRightOf="@id/imageWXQRCode"
         android:layout_marginBottom="80dp" />
@@ -41,6 +39,13 @@
         android:text="结算"
         android:textColor="#ffffff"
         android:textSize="20dp" />
+    <TextView
+        android:id="@+id/txtLogo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="45dp"
+        android:text="实际项目中建议将二维码放在一个单独的页面中显示" />
 
     <Button
         android:id="@+id/btnQueryAndRefund"
