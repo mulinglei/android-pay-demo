@@ -12,6 +12,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -19,6 +22,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.zxing.WriterException;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.Holder;
 import com.orhanobut.dialogplus.ListHolder;
@@ -33,6 +37,7 @@ import java.util.Map;
 
 import cn.beecloud.BCAnalysis;
 import cn.beecloud.BCPay;
+import cn.beecloud.BCQRCodePay;
 import cn.beecloud.BCUtil;
 import cn.beecloud.BeeCloud;
 import cn.beecloud.async.BCCallback;
@@ -45,13 +50,14 @@ public class ShoppingCartActivity extends ActionBarActivity {
     public static final int PLUGIN_VALID = 0;
     public static final String PLUGIN_NOT_INSTALLED = "-1";
     public static final String PLUGIN_NEED_UPGRADE = "2";
-    private static final String TAG = "ShoppingCartActivity";
+    private static final String TAG = ShoppingCartActivity.class.getSimpleName();
     Button btnShopping;
     Button btnQueryAndRefund;
     ImageView imageWXQRCode;
-    ImageView imageAliQRCode;
     Bitmap bitmapWXQRCode;
-    Bitmap bitmapAliQRCode;
+    WebView webView;
+    String sbHtml;
+
     private String[] names = new String[]{
             "衣服", "裤子", "鞋子",
     };
@@ -68,8 +74,8 @@ public class ShoppingCartActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopping_cart);
 
-        //BeeCloud
         BeeCloud.setAppIdAndSecret(this, "c5d1cba1-5e3f-4ba0-941d-9b0a371fe719", "39a7a518-9ac8-4a9e-87bc-7885f33cf18c");
+
         BeeCloud.setNetworkTimeout(10000);
 
         BCAnalysis.setUserId("BeeCloud Android User！");
@@ -115,7 +121,14 @@ public class ShoppingCartActivity extends ActionBarActivity {
                 } else if (msg.what == 4) {
                     imageWXQRCode.setImageBitmap(bitmapWXQRCode);
                 } else if (msg.what == 5) {
-                    imageAliQRCode.setImageBitmap(bitmapAliQRCode);
+                    webView.loadData(sbHtml, "text/html", "utf-8");
+                    webView.setWebViewClient(new WebViewClient() {
+                        @Override
+                        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                            view.loadUrl(url);
+                            return true;
+                        }
+                    });
                 }
                 return true;
             }
@@ -156,10 +169,15 @@ public class ShoppingCartActivity extends ActionBarActivity {
         listView.setAdapter(adapter);
 
         imageWXQRCode = (ImageView) findViewById(R.id.imageWXQRCode);
-        imageAliQRCode = (ImageView) findViewById(R.id.imageAliQRCode);
+        webView = (WebView) findViewById(R.id.webView);
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        webSettings.setSupportZoom(true);
+        webSettings.setLoadWithOverviewMode(true);
+        webSettings.setBuiltInZoomControls(true);
 
         //微信扫码支付测试
-        /*BCQRCodePay.getInstance().reqWXQRCodePayAsync("web wxpay", "1",
+        BCQRCodePay.getInstance().reqWXQRCodePayAsync("web wxpay", "1",
                 BCUtil.generateRandomUUID().toString().replace("-", ""),
                 new BCCallback() {
                     @Override
@@ -177,66 +195,26 @@ public class ShoppingCartActivity extends ActionBarActivity {
                         }
 
                     }
-                });*/
+                });
 
-        //支付宝扫码支付测试
-        imageAliQRCode = (ImageView) findViewById(R.id.imageAliQRCode);
-        Map<String, Object> mapExt = new HashMap<>();
-        mapExt.put("single_limit", "2");
-        mapExt.put("user_limit", "3");
-        mapExt.put("logo_name", "BeeCloud");
-
-        Map<String, Object> mapSKU = new HashMap<>();
-        mapSKU.put("sku_id", "002");
-        mapSKU.put("sku_name", "薯条");
-        mapSKU.put("sku_price", "9.00");
-        mapSKU.put("sku_inventory", "500");
-
-        Map<String, Object> mapGoodsInfo = new HashMap<>();
-        mapGoodsInfo.put("id", "123456");
-        mapGoodsInfo.put("name", "商品名称");
-        mapGoodsInfo.put("price", "0.01");
-        //商品有效期结束时间必须大于当前时间，且必须大于开始时间。
-        mapGoodsInfo.put("expiry_date", "2015-04-11 01:01:01|2015-09-19 01:02:59");
-        mapGoodsInfo.put("desc", "商品描述");
-        //mapGoodsInfo.put("sku_title","请选择颜色：");
-        //mapGoodsInfo.put("sku",mapSKU);
-
-        Map<String, Object> mapBizData = new HashMap<>();
-        mapBizData.put("memo", "备注");
-        mapBizData.put("ext_info", mapExt);
-        mapBizData.put("goods_info", mapGoodsInfo);
-        mapBizData.put("need_address", "F");
-        mapBizData.put("trade_type", "1");
-        //mapBizData.put("return_url", "http://www.test.com/return_ulr.aspx");
-        //mapBizData.put("notify_url", "http://www.test.com/notify_url.aspx");
-        //mapBizData.put("query_url", "http://www.test.com/query_url.aspx");
-
-        /**
-         Map的结构示例：
-         resultCode="0.0"
-         result="SUCCESS"
-         qr_img_url="https://mobilecodec.alipay.com/show.htm?code=gd6rvgyzk893nja178&picSize=S"
-         errMsg=""
-         qrcode="https://qr.alipay.com/gd6rvgyzk893nja178"
-         */
-       /*BCQRCodePay.getInstance().reqAliQRCodePayAsync(BCUtilPrivate.mAliQRTypeAdd, "", mapBizData,
-                new BCMapCallback() {
+        //支付宝网页支付，实际项目中建议将二维码放在一个单独的页面中显示。
+        BCQRCodePay.getInstance().reqAliQRCodePayAsync("subject", "1", BCUtil.generateRandomUUID().toString().replace("-", ""),
+                "http://www.beecloud.cn", null,
+                new BCCallback() {
 
                     @Override
-                    public void done(BCMapResult bcMapResult) {
+                    public void done(BCResult bcResult) {
                         try {
-                            String qr_img_url = String.valueOf(bcMapResult.getStringObjectMap().get("qr_img_url"));
-                            bitmapAliQRCode = BCUtil.getHttpBitmap(qr_img_url);
-
+                            Log.e(TAG, bcResult.getMsgInfo());
+                            sbHtml = bcResult.getMsgInfo();
                             Message msg = mHandler.obtainMessage();
                             msg.what = 5;
                             mHandler.sendMessage(msg);
                         } catch (Exception ex) {
-                            Log.i(TAG, ex.getMessage());
+                            Log.e(TAG, ex.getMessage());
                         }
                     }
-                });*/
+                });
     }
 
     /**
