@@ -23,8 +23,8 @@
 
     <WebView
         android:id="@+id/webView"
-        android:layout_width="200dp"
-        android:layout_height="200dp"
+        android:layout_width="140dp"
+        android:layout_height="140dp"
         android:layout_alignParentBottom="true"
         android:layout_toRightOf="@id/imageWXQRCode"
         android:layout_marginBottom="80dp" />
@@ -44,8 +44,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="45dp"
-        android:text="实际项目中建议将二维码放在一个单独的页面中显示" />
+        android:layout_marginBottom="50dp"
+        android:text="实际项目中建议将二维码放在一个单独的页面中显示,以方便程序控制支付宝的二维码显示" />
 
     <Button
         android:id="@+id/btnQueryAndRefund"

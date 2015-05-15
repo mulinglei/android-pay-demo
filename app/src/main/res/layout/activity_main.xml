@@ -15,18 +15,33 @@
         android:text="@string/hello_world" />
 
     <Button
-        android:id="@+id/btnStartPay"
+        android:id="@+id/btnWeChatOrder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/txtLogo"
-        android:text="@string/start_pay" />
+        android:text="微信订单查询" />
+
 
     <Button
-        android:id="@+id/btnOrderList"
+        android:id="@+id/btnAliPayOrder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/txtLogo"
-        android:layout_toRightOf="@+id/btnStartPay"
-        android:text="@string/order_list" />
+        android:layout_below="@id/btnWeChatOrder"
+        android:text="支付宝订单查询" />
+
+    <Button
+        android:id="@+id/btnUPPayOrder"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnAliPayOrder"
+        android:text="银联订单查询" />
+
+
+    <ListView
+        android:id="@+id/listViewOrder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/btnUPPayOrder"
+        android:layout_marginTop="20dp"></ListView>
 
 </RelativeLayout>

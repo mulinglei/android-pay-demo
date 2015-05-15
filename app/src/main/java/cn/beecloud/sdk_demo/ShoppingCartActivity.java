@@ -142,14 +142,14 @@ public class ShoppingCartActivity extends ActionBarActivity {
             }
         });
 
-         /*btnQueryAndRefund = (Button) findViewById(R.id.btnQueryAndRefund);
+        btnQueryAndRefund = (Button) findViewById(R.id.btnQueryAndRefund);
         btnQueryAndRefund.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-           Intent intent = new Intent(ShoppingCartActivity.this, MainActivity.class);
-            startActivity(intent);
+                Intent intent = new Intent(ShoppingCartActivity.this, MainActivity.class);
+                startActivity(intent);
             }
-        });*/
+        });
 
         List<Map<String, Object>> listItems = new ArrayList<>();
         for (int i = 0; i < names.length; i++) {
