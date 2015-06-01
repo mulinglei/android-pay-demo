@@ -30,14 +30,10 @@ import cn.beecloud.BCActivity;
 import cn.beecloud.BCAnalysis;
 import cn.beecloud.BCLocation;
 import cn.beecloud.BCPay;
-import cn.beecloud.BCQRCodePay;
 import cn.beecloud.BCUtil;
-import cn.beecloud.BCUtilPrivate;
 import cn.beecloud.BeeCloud;
 import cn.beecloud.async.BCArrayResultCallback;
 import cn.beecloud.async.BCCallback;
-import cn.beecloud.async.BCMapCallback;
-import cn.beecloud.async.BCMapResult;
 import cn.beecloud.async.BCResult;
 
 import com.unionpay.UPPayAssistEx;
@@ -63,13 +59,14 @@ public class MainActivity extends BCActivity {
 
 	Map<String, String> mapOptional = new HashMap<String, String>();
 
-    String optionalKey = "android_optional_key";
-    String optionalValue = "android_optional_value";
+	String optionalKey = "android_optional_key";
+	String optionalValue = "android_optional_value";
 
-	 ImageView imageWXQRCode;
-	    ImageView imageAliQRCode;
-	    Bitmap bitmapWXQRCode;
-	    Bitmap bitmapAliQRCode;
+	ImageView imageWXQRCode;
+	ImageView imageAliQRCode;
+	Bitmap bitmapWXQRCode;
+	Bitmap bitmapAliQRCode;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -122,104 +119,23 @@ public class MainActivity extends BCActivity {
 							});
 					builder.create().show();
 				} else if (msg.what == 4) {
-                    imageWXQRCode.setImageBitmap(bitmapWXQRCode);
-                } else if (msg.what == 5) {
-                    imageAliQRCode.setImageBitmap(bitmapAliQRCode);
-                }
+					imageWXQRCode.setImageBitmap(bitmapWXQRCode);
+				} else if (msg.what == 5) {
+					imageAliQRCode.setImageBitmap(bitmapAliQRCode);
+				}
 				return true;
 			}
 		});
-		BeeCloud.setAppIdAndSecret(this,
-				"c5d1cba1-5e3f-4ba0-941d-9b0a371fe719",
-				"39a7a518-9ac8-4a9e-87bc-7885f33cf18c");
+		BeeCloud.setAppIdAndSecret(this, "c5d1cba1-5e3f-4ba0-941d-9b0a371fe719", "39a7a518-9ac8-4a9e-87bc-7885f33cf18c");
 
 		BCAnalysis.setUserId("BeeCloud Android User！");
 		BCAnalysis.setUserGender(true);
 		BCAnalysis.setUserAge(28);
 		BCLocation address_bj = BCLocation.locationWithLatitude(39.92, 116.46);
-		  imageWXQRCode = (ImageView) findViewById(R.id.imageWXQRCode);
-	        imageAliQRCode = (ImageView) findViewById(R.id.imageAliQRCode);
+		imageWXQRCode = (ImageView) findViewById(R.id.imageWXQRCode);
+		imageAliQRCode = (ImageView) findViewById(R.id.imageAliQRCode);
 
-		//微信扫码支付测试
-        /*BCQRCodePay.getInstance().reqWXQRCodePayAsync("web wxpay", "1",
-                BCUtil.generateRandomUUID().toString().replace("-", ""),
-                new BCCallback() {
-                    @Override
-                    public void done(BCResult result) {
-                        if (result.isSuccess()) {
-                            String code_url = result.getMsgInfo();
-                            try {
-                                 bitmapWXQRCode = BCUtil.createQRImage(code_url, 250, 250);
-                            } catch ( Exception e) {
-                                e.printStackTrace();
-                            }
-                            Message msg = mHandler.obtainMessage();
-                            msg.what = 4;
-                            mHandler.sendMessage(msg);
-                        }
-
-                    }
-                });*/
-      //支付宝扫码支付测试
-        imageAliQRCode = (ImageView) findViewById(R.id.imageAliQRCode);
-        Map<String, Object> mapExt = new HashMap<>();
-        mapExt.put("single_limit", "2");
-        mapExt.put("user_limit", "3");
-        mapExt.put("logo_name", "BeeCloud");
-
-        Map<String, Object> mapSKU = new HashMap<>();
-        mapSKU.put("sku_id", "002");
-        mapSKU.put("sku_name", "薯条");
-        mapSKU.put("sku_price", "9.00");
-        mapSKU.put("sku_inventory", "500");
-
-        Map<String, Object> mapGoodsInfo = new HashMap<>();
-        mapGoodsInfo.put("id", "123456");
-        mapGoodsInfo.put("name", "商品名称");
-        mapGoodsInfo.put("price", "0.01");
-        //商品有效期结束时间必须大于当前时间，且必须大于开始时间。
-        mapGoodsInfo.put("expiry_date", "2015-04-11 01:01:01|2015-09-19 01:02:59");
-        mapGoodsInfo.put("desc", "商品描述");
-        //mapGoodsInfo.put("sku_title","请选择颜色：");
-        //mapGoodsInfo.put("sku",mapSKU);
-
-        Map<String, Object> mapBizData = new HashMap<>();
-        mapBizData.put("memo", "备注");
-        mapBizData.put("ext_info", mapExt);
-        mapBizData.put("goods_info", mapGoodsInfo);
-        mapBizData.put("need_address", "F");
-        mapBizData.put("trade_type", "1");
-        //mapBizData.put("return_url", "http://www.test.com/return_ulr.aspx");
-        //mapBizData.put("notify_url", "http://www.test.com/notify_url.aspx");
-        //mapBizData.put("query_url", "http://www.test.com/query_url.aspx");
-
-         
-//         Map的结构示例：
-//         resultCode="0.0"
-//         result="SUCCESS"
-//         qr_img_url="https://mobilecodec.alipay.com/show.htm?code=gd6rvgyzk893nja178&picSize=S"
-//         errMsg=""
-//         qrcode="https://qr.alipay.com/gd6rvgyzk893nja178"
- 
-        BCQRCodePay.getInstance().reqAliQRCodePayAsync(BCUtilPrivate.mAliQRTypeAdd, "", mapBizData,
-                new BCMapCallback() {
-
-                    @Override
-                    public void done(BCMapResult bcMapResult) {
-                        try {
-                            String qr_img_url = String.valueOf(bcMapResult.getStringObjectMap().get("qr_img_url"));
-                            bitmapAliQRCode = BCUtil.getHttpBitmap(qr_img_url);
-
-                            Message msg = mHandler.obtainMessage();
-                            msg.what = 5;
-                            mHandler.sendMessage(msg);
-                        } catch (Exception ex) {
-                            Log.i(TAG, ex.getMessage());
-                        }
-                    }
-                });
 		
-
 		listViewOrder = (ListView) findViewById(R.id.listViewOrder);
 		listViewOrder
 				.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -235,11 +151,13 @@ public class MainActivity extends BCActivity {
 											"201101120001", "1", "退款原因！",
 											new BCCallback() {
 												@Override
-												public void done(BCResult  bcResult) {
+												public void done(
+														BCResult bcResult) {
 													Message msg = mHandler
 															.obtainMessage();
 													msg.what = 2;
-													msg.obj = bcResult.getMsgInfo();
+													msg.obj = bcResult
+															.getMsgInfo();
 													mHandler.sendMessage(msg);
 												}
 											});
@@ -249,11 +167,13 @@ public class MainActivity extends BCActivity {
 											"201101120001", "0.01", "退款原因！",
 											new BCCallback() {
 												@Override
-												public void done(BCResult bcResult) {
+												public void done(
+														BCResult bcResult) {
 													Message msg = mHandler
 															.obtainMessage();
 													msg.what = 2;
-													msg.obj = bcResult.getMsgInfo();
+													msg.obj = bcResult
+															.getMsgInfo();
 													mHandler.sendMessage(msg);
 												}
 											});
@@ -263,11 +183,13 @@ public class MainActivity extends BCActivity {
 											"201101120001", "退款原因",
 											new BCCallback() {
 												@Override
-												public void done(BCResult bcResult) {
+												public void done(
+														BCResult bcResult) {
 													Message msg = mHandler
 															.obtainMessage();
 													msg.what = 2;
-													msg.obj = bcResult.getMsgInfo();
+													msg.obj = bcResult
+															.getMsgInfo();
 													mHandler.sendMessage(msg);
 												}
 											});
@@ -279,16 +201,7 @@ public class MainActivity extends BCActivity {
 			@Override
 			public void onClick(View v) {
 				try {
-					/*
-					 * //老版本微信
-					 * BCPay.getInstance(MainActivity.this).reqWXPaymentV2Async
-					 * ("test", "1", BCUtil.generateRandomUUID().replace("-",
-					 * ""), "BeeCloud-Android", mapOptional, new BCPayCallback()
-					 * {
-					 * 
-					 * @Override public void done(boolean b, String s) {
-					 * Log.i(TAG, "reqWXPaymentAsync:" + b + "|" + s); } });
-					 */
+					 
 					// 新版本微信
 					BCPay.getInstance(MainActivity.this).reqWXPaymentV3Async(
 							"test", "1",
@@ -341,7 +254,7 @@ public class MainActivity extends BCActivity {
 			@Override
 			public void onClick(View v) {
 				try {
-					mapOptional = new HashMap<String,String>();
+					mapOptional = new HashMap<String, String>();
 					optionalKey = "android_optional_key";
 					optionalValue = "android_optional_value";
 					if (!BCUtil.isValidIdentifier(optionalKey)
@@ -408,22 +321,23 @@ public class MainActivity extends BCActivity {
 						return;
 					}
 					mapOptional.put(optionalKey, optionalValue);
-					/*
-					 * BCPay.getInstance(MainActivity.this).reqUnionPaymentAsync(
-					 * "Android-UPPay", "Android-UPPay-body",
-					 * BCUtil.generateRandomUUID().replace("-", ""), "1",
-					 * mapOptional, new BCCallback() {
-					 * 
-					 * @Override public void done(BCResult bcResult) {
-					 * Log.i(TAG, "btnUPPay:" + bcResult.isSuccess() + "|" +
-					 * bcResult.getMsgInfo());
-					 * 
-					 * int ret = Integer.valueOf(bcResult.getMsgInfo()); if (ret
-					 * == PLUGIN_NEED_UPGRADE || ret == PLUGIN_NOT_INSTALLED) {
-					 * // 需要重新安装控件 Message msg = mHandler.obtainMessage();
-					 * msg.what = 3; mHandler.sendMessage(msg); } } });
-					 */
-					BCPay.getInstance(MainActivity.this)
+					 
+					  BCPay.getInstance(MainActivity.this).reqUnionPaymentByAPKAsync(
+					   "Android-UPPay", "Android-UPPay-body",
+					  BCUtil.generateRandomUUID().replace("-", ""), "1",
+					   mapOptional, new BCCallback() {
+					  
+					   @Override public void done(BCResult bcResult) {
+					   Log.i(TAG, "btnUPPay:" + bcResult.isSuccess() + "|" +
+					  bcResult.getMsgInfo());
+					  
+					   int ret = Integer.valueOf(bcResult.getMsgInfo()); if (ret
+					   == PLUGIN_NEED_UPGRADE || ret == PLUGIN_NOT_INSTALLED) {
+					   // 需要重新安装控件
+						   Message msg = mHandler.obtainMessage();
+					   msg.what = 3; mHandler.sendMessage(msg); } } });
+					 
+					/*BCPay.getInstance(MainActivity.this)
 							.reqUnionPaymentByJARAsync(
 									"Android-UPPay",
 									"Android-UPPay-body",
@@ -440,7 +354,7 @@ public class MainActivity extends BCActivity {
 															+ bcResult
 																	.getMsgInfo());
 										}
-									});
+									});*/
 				} catch (Exception e) {
 					System.out.println("e.getMessage():" + e.getMessage());
 				}
@@ -473,8 +387,7 @@ public class MainActivity extends BCActivity {
 				}
 			}
 		});
-		
-		
+
 	}
 
 	/**

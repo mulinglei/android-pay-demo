@@ -24,7 +24,7 @@ public class MySimpleAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return 3;
+        return 4;
     }
 
     @Override
@@ -63,9 +63,13 @@ public class MySimpleAdapter extends BaseAdapter {
                 viewHolder.textView.setText(context.getString(R.string.alipay_title));
                 viewHolder.imageView.setImageResource(R.drawable.alipay);
                 break;
-            default:
+            case 2:
                 viewHolder.textView.setText(context.getString(R.string.unionpay_title));
                 viewHolder.imageView.setImageResource(R.drawable.unionpay);
+                break;
+            case 3:
+                viewHolder.textView.setText(context.getString(R.string.pppay_title));
+                viewHolder.imageView.setImageResource(R.drawable.pp);
                 break;
         }
 

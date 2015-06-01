@@ -30,9 +30,12 @@ import com.orhanobut.dialogplus.OnClickListener;
 import com.orhanobut.dialogplus.OnItemClickListener;
 import com.unionpay.UPPayAssistEx;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import cn.beecloud.BCAnalysis;
@@ -42,9 +45,11 @@ import cn.beecloud.BCUtil;
 import cn.beecloud.BeeCloud;
 import cn.beecloud.async.BCCallback;
 import cn.beecloud.async.BCResult;
+import cn.paypalm.pppayment.PPInterface;
+import cn.paypalm.pppayment.global.ResponseDataToMerchant;
 
 
-public class ShoppingCartActivity extends ActionBarActivity {
+public class ShoppingCartActivity extends ActionBarActivity implements ResponseDataToMerchant {
 
     // 银联支付控件的状态
     public static final int PLUGIN_VALID = 0;
@@ -58,6 +63,20 @@ public class ShoppingCartActivity extends ActionBarActivity {
     WebView webView;
     String sbHtml;
 
+    private HashMap<String, String> userInfo = new HashMap<String, String>(); // phone
+    // 手机，cardnum
+    // 银行卡号，idcard
+    // 身份证号，name
+    // 开户姓名,
+    // creditphone
+    // 无卡支付手机号,errorexit
+    // 银行卡四项信息页面出错时是否退出
+    // yes
+    // 时退出,
+    // isedit银行卡四项信息是否可编辑
+    // no
+    // 为不可编辑
+
     private String[] names = new String[]{
             "衣服", "裤子", "鞋子",
     };
@@ -68,6 +87,7 @@ public class ShoppingCartActivity extends ActionBarActivity {
             R.drawable.yifu, R.drawable.kuzi, R.drawable.xiezi
     };
     private Handler mHandler;
+    private static final String MERCHANT_ID = "1000002153";// 默认商户ID
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +101,12 @@ public class ShoppingCartActivity extends ActionBarActivity {
         BCAnalysis.setUserId("BeeCloud Android User！");
         BCAnalysis.setUserGender(true);
         BCAnalysis.setUserAge(28);
+
+        userInfo.put("phone", "");
+        userInfo.put("cardnum", "");
+        userInfo.put("idcard", "");
+        userInfo.put("name", "");
+        userInfo.put("creditphone", "");
 
         // Defines a Handler object that's attached to the UI thread.
         // 通过Handler.Callback()可消除内存泄漏警告 By Charlie Chu
@@ -175,6 +201,7 @@ public class ShoppingCartActivity extends ActionBarActivity {
         webSettings.setSupportZoom(true);
         webSettings.setLoadWithOverviewMode(true);
         webSettings.setBuiltInZoomControls(true);
+
 
         //微信扫码支付测试
         BCQRCodePay.getInstance().reqWXQRCodePayAsync("web wxpay", "1",
@@ -345,6 +372,12 @@ public class ShoppingCartActivity extends ActionBarActivity {
                                     }
                                 });
                         break;
+                    case "PP钱包支付":
+
+                        PPInterface.startSafe(ShoppingCartActivity.this, MERCHANT_ID);
+                        BCPay.getInstance(ShoppingCartActivity.this).reqPPPaymentAsync(new SimpleDateFormat("yyyyMMddHHmmss",
+                                Locale.CHINESE).format(new Date()), "", "2015052513", "朱朱朱", "1", "100001", "", "http://www.test.com", "好东西", userInfo, "sdk2.2", ShoppingCartActivity.this);
+
                 }
             }
         };
@@ -352,6 +385,7 @@ public class ShoppingCartActivity extends ActionBarActivity {
         MySimpleAdapter adapter = new MySimpleAdapter(ShoppingCartActivity.this);
         showCompleteDialog(holder, gravity, adapter, clickListener, itemClickListener);
     }
+
 
     private void showCompleteDialog(Holder holder, DialogPlus.Gravity gravity, BaseAdapter adapter,
                                     OnClickListener clickListener, OnItemClickListener itemClickListener) {
@@ -388,5 +422,21 @@ public class ShoppingCartActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void responseData(int arg0, String arg1) {
+        switch (arg0) {
+            case 0:
+                break;
+            case ResponseDataToMerchant.RESULT_PAYCODE_OK:
+                Log.d(TAG, "支付成功");
+                // Toast.makeText(this, "用户支付成功", Toast.LENGTH_LONG).show();
+                break;
+            case ResponseDataToMerchant.RESULT_PAYCODE_ERROR:
+                Log.d(TAG, "支付失败");
+                // Toast.makeText(this, "用户支付失败", Toast.LENGTH_LONG).show();
+                break;
+        }
     }
 }

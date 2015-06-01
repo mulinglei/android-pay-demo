@@ -19,6 +19,7 @@
     <string name="wechat_title">微信支付</string>
     <string name="alipay_title">支付宝支付</string>
     <string name="unionpay_title">银联支付</string>
+    <string name="pppay_title">PP钱包支付</string>
     <string name="question">Do you like Dialog Plus?</string>
     <string name="button_like">I like it</string>
     <string name="button_love">I love it</string>
