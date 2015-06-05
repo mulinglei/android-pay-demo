@@ -72,7 +72,7 @@ public class MainActivity extends BCActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 		// Defines a Handler object that's attached to the UI thread.
-		// 通过Handler.Callback()可消除内存泄漏警告 By ZhuChenglin
+		// 通过Handler.Callback()可消除内存泄漏警告 
 		mHandler = new Handler(new Handler.Callback() {
 			/**
 			 * Callback interface you can use when instantiating a Handler to

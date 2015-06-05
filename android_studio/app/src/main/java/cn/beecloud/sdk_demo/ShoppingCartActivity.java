@@ -63,19 +63,7 @@ public class ShoppingCartActivity extends ActionBarActivity implements ResponseD
     WebView webView;
     String sbHtml;
 
-    private HashMap<String, String> userInfo = new HashMap<String, String>(); // phone
-    // 手机，cardnum
-    // 银行卡号，idcard
-    // 身份证号，name
-    // 开户姓名,
-    // creditphone
-    // 无卡支付手机号,errorexit
-    // 银行卡四项信息页面出错时是否退出
-    // yes
-    // 时退出,
-    // isedit银行卡四项信息是否可编辑
-    // no
-    // 为不可编辑
+    private HashMap<String, String> userInfo = new HashMap<String, String>();
 
     private String[] names = new String[]{
             "衣服", "裤子", "鞋子",
@@ -96,7 +84,7 @@ public class ShoppingCartActivity extends ActionBarActivity implements ResponseD
 
         BeeCloud.setAppIdAndSecret(this, "c5d1cba1-5e3f-4ba0-941d-9b0a371fe719", "39a7a518-9ac8-4a9e-87bc-7885f33cf18c");
 
-        BeeCloud.setNetworkTimeout(10000);
+        BeeCloud.setNetworkTimeout(40000);
 
         BCAnalysis.setUserId("BeeCloud Android User！");
         BCAnalysis.setUserGender(true);
@@ -224,7 +212,7 @@ public class ShoppingCartActivity extends ActionBarActivity implements ResponseD
                     }
                 });
 
-        //支付宝网页支付，实际项目中建议将二维码放在一个单独的页面中显示。
+        /*//支付宝网页支付，实际项目中建议将二维码放在一个单独的页面中显示。
         BCQRCodePay.getInstance().reqAliQRCodePayAsync("subject", "1", BCUtil.generateRandomUUID().toString().replace("-", ""),
                 "http://www.beecloud.cn", null,
                 new BCCallback() {
@@ -241,7 +229,7 @@ public class ShoppingCartActivity extends ActionBarActivity implements ResponseD
                             Log.e(TAG, ex.getMessage());
                         }
                     }
-                });
+                });*/
     }
 
     /**
