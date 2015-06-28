@@ -82,6 +82,10 @@ public class ShoppingCartActivity extends ActionBarActivity implements ResponseD
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shopping_cart);
 
+        // 推荐在主Activity里的onCreate函数中初始化BeeCloud.
+        BeeCloud.setAppIdAndSecret(this, "c5d1cba1-5e3f-4ba0-941d-9b0a371fe719", "39a7a518-9ac8-4a9e-87bc-7885f33cf18c");
+        BeeCloud.setNetworkTimeout(30000);
+
         // 如果用到微信支付，比如在用到微信支付的Activity的onCreate函数里调用以下函数.
         BCPay.initWechatPay(ShoppingCartActivity.this);
 
